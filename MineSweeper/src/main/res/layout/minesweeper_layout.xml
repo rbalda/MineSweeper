@@ -5,7 +5,9 @@
     android:layout_height="fill_parent"
     android:background="@drawable/background">
 
-    <TableRow android:paddingTop="10dp">
+    <TableRow
+        android:paddingTop="10dp"
+        android:layout_gravity="center_horizontal">
 
         <TextView
             android:id="@+id/Clock"
@@ -14,9 +16,9 @@
             android:layout_height="60dp"
             android:gravity="center_horizontal"
             android:textColor="#FFFFFF"
-            android:padding="10dp"
-            android:textSize="40dp"
-            android:text="000" />
+            android:textSize="60dp"
+            android:text="000"
+            android:padding="-10dp" />
 
         <ImageButton
             android:id="@+id/Smile"
@@ -31,8 +33,7 @@
             android:layout_height="60dp"
             android:gravity="center_horizontal"
             android:textColor="#FFFFFF"
-            android:padding="10dp"
-            android:textSize="40dp"
+            android:textSize="60dp"
             android:text="000" />
         />
 
