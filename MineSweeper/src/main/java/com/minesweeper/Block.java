@@ -13,7 +13,7 @@ public class Block {
     private Point allocation;
     private int value;
     private LinkedList<Block> adjacents;
-    private BlockUI gui;
+
 
     public Block(Point point) {
         allocation = point;
@@ -28,13 +28,5 @@ public class Block {
         this.value = adjacents.size();
     }
 
-    public void setGui(final BlockUI gui) {
-        this.gui = gui;
-        gui.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                gui.discover();
-            }
-        });
-    }
+
 }

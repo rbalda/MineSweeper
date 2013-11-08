@@ -38,6 +38,23 @@
         />
 
     </TableRow>
-
-
+    <TableRow>
+        <TextView
+            android:layout_column="0"
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:layout_span="3"
+            android:padding="10dip"/>
+    </TableRow>
+    <TableRow>
+        <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/game_panel"
+            android:layout_width="260dp"
+            android:layout_height="400dp"
+            android:gravity="bottom"
+            android:stretchColumns="*"
+            android:layout_span="3"
+            android:padding="5dip" >
+        </TableLayout>
+    </TableRow>
 </TableLayout>
