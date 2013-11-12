@@ -1,39 +1,59 @@
 package com.minesweeper;
 
+import android.os.Handler;
 import android.widget.TextView;
+
 
 /**
  * Created by ReneAlexander on 05/11/13.
  */
 public class Clock implements Runnable {
-    private Thread thread;
     private int count;
     private final int MAX_COUNT = 999;
     private boolean isInitialized = false;
+    private TextView text;
+    private Handler time;
 
-    public Clock() {
-        thread = new Thread(this);
+    public Clock(TextView t) {
+        time = new Handler();
         count = 0;
+        text = t;
+        t.setText("00" + Integer.toString(count));
+
     }
 
     @Override
     public void run() {
-        while (count < MAX_COUNT && isInitialized) {
-            try {
-                ++count;
-                Thread.sleep(1000);
-            } catch (InterruptedException ex) {
+        long currentMilliseconds = System.currentTimeMillis();
+        ++count;
 
-            }
+        if (count < 10) {
+            text.setText("00" + Integer.toString(count));
+        } else if (count < 100) {
+            text.setText("0" + Integer.toString(count));
+        } else {
+            text.setText(Integer.toString(count));
         }
+
+        time.postAtTime(this, currentMilliseconds);
+
+        time.postDelayed(this, 1000);
+
+        if (count > MAX_COUNT)
+            stop();
     }
 
     public void start() {
-        thread.start();
+        if (!isInitialized) {
+            count = 0;
+            time.removeCallbacks(this);
+            time.postDelayed(this, 1000);
+            isInitialized = true;
+        }
     }
 
     public void stop() {
-        count = 0;
+        time.removeCallbacks(this);
         isInitialized = false;
     }
 

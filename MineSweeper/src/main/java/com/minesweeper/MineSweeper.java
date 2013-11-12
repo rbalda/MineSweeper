@@ -30,14 +30,16 @@ public class MineSweeper extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        clock = new Clock();
+
         setContentView(R.layout.minesweeper_layout);
         TextView t = (TextView) findViewById(R.id.Clock);
-        t.setText(clock.toString());
+        clock = new Clock(t);
 
         gamePanel = (TableLayout)findViewById(R.id.game_panel);
 
+
         btnSmile = (ImageButton) findViewById(R.id.Smile);
+
         btnSmile.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -45,6 +47,7 @@ public class MineSweeper extends Activity {
             {
                 createGamePanel();
                 showGamePanel();
+                clock.start();
             }
         });
 
@@ -98,8 +101,11 @@ public class MineSweeper extends Activity {
                 blocks[row][column].setPadding(blockPadding, blockPadding, blockPadding, blockPadding);
                 tableRow.addView(blocks[row][column]);
             }
+
+
             gamePanel.addView(tableRow,new TableLayout.LayoutParams(
                     (blockDimension + 2 * blockPadding) * nOcInGamePanel, blockDimension + 2 * blockPadding));
         }
     }
+
 }
