@@ -27,12 +27,24 @@ public class BlockUI extends Button {
         super(context, attrs, defStyle);
     }
 
-    public void setDefaults()
+    public void setDefaults(int r, int c)
     {
+        block=new Block(r,c);
         isCovered = true;
-
         this.setBackgroundResource(R.drawable.button_states);
 
+    }
+
+    public void setValue(int v){
+        this.block.setValue(v);
+    }
+
+    public int getValue(){
+        return block.getValue();
+    }
+
+    public void addAdjacent(Block block){
+        this.block.addAdjacent(block);
     }
 
     public void discover() {
