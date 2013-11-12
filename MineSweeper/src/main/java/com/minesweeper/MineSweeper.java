@@ -2,6 +2,7 @@ package com.minesweeper;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TableLayout;
@@ -23,8 +24,8 @@ public class MineSweeper extends Activity {
     private int blockDimension = 24; // width of each block
     private int blockPadding = 2; // padding between blocks
 
-    private int nOrInGamePanel = 9;
-    private int nOcInGamePanel = 9;
+    private int nOrInGamePanel = 19;
+    private int nOcInGamePanel = 19;
     private int totalNumberOfMines = 10;
 
     @Override
@@ -91,7 +92,7 @@ public class MineSweeper extends Activity {
         {
             TableRow tableRow = new TableRow(this);
             tableRow.setLayoutParams(new LayoutParams((blockDimension + 2 * blockPadding) * nOcInGamePanel, blockDimension + 2 * blockPadding));
-
+            tableRow.setGravity(android.view.Gravity.CENTER_HORIZONTAL);
             for (int column = 1; column < nOcInGamePanel + 1; column++)
             {
                 blocks[row][column].setLayoutParams(new LayoutParams(26,26));
