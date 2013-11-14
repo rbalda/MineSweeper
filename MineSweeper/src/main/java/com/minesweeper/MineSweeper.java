@@ -11,6 +11,8 @@ import android.widget.TableRow;
 import android.widget.TableRow.LayoutParams;
 import android.widget.TextView;
 
+import java.util.Random;
+
 /**
  * Created by ReneAlexander on 04/11/13.
  */
@@ -23,6 +25,8 @@ public class MineSweeper extends Activity {
     private BlockUI blocks[][]; // blocks for mine field
     private int blockDimension = 24; // width of each block
     private int blockPadding = 2; // padding between blocks
+
+
 
     private int nOrInGamePanel = 19;
     private int nOcInGamePanel = 19;
@@ -49,6 +53,7 @@ public class MineSweeper extends Activity {
                 createGamePanel();
                 showGamePanel();
                 clock.start();
+                setMinesOnGamePanel(10,4,5);
             }
         });
 
@@ -68,7 +73,7 @@ public class MineSweeper extends Activity {
             for (int column = 0; column < nOcInGamePanel + 2; column++)
             {
                 blocks[row][column] = new BlockUI(this);
-                blocks[row][column].setDefaults();
+                blocks[row][column].setDefaults(row,column);
 
                 final int cRow = row;
                 final int cColumn = column;
@@ -104,8 +109,25 @@ public class MineSweeper extends Activity {
             }
 
 
-            gamePanel.addView(tableRow,new TableLayout.LayoutParams(
+            gamePanel.addView(tableRow, new TableLayout.LayoutParams(
                     (blockDimension + 2 * blockPadding) * nOcInGamePanel, blockDimension + 2 * blockPadding));
+         
+        }
+
+    }
+
+    private void setMinesOnGamePanel(int nMines, int cColumn, int cRow){
+        Random rand = new Random();
+        int d_mines = 0;
+        while (d_mines < nMines){
+            int mine_c = rand.nextInt(nOcInGamePanel);
+            int mine_r = rand.nextInt(nOrInGamePanel);
+            if(mine_r+1 != cRow || mine_c+1!=cColumn){
+                if (blocks[mine_r][mine_c].getValue() >= 0){
+                    d_mines += 1;
+                    blocks[mine_r][mine_c].setValue(-1);
+                }
+            }
         }
     }
 

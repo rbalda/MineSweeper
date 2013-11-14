@@ -12,12 +12,20 @@ import java.util.LinkedList;
 public class Block {
     private Point allocation;
     private int value;
-    private LinkedList<Block> adjacents;
-
+    private LinkedList<Block> adjacent;
+    private int row;
+    private int column;
 
     public Block(Point point) {
         allocation = point;
-        adjacents = new LinkedList<Block>();
+        adjacent = new LinkedList<Block>();
+    }
+
+    public Block(int row, int column) {
+        this.row = row;
+        this.column = column;
+        adjacent = new LinkedList<Block>();
+        this.value = adjacent.size();
     }
 
     public void setValue(int value) {
@@ -25,8 +33,30 @@ public class Block {
     }
 
     public void setValue() {
-        this.value = adjacents.size();
+        this.value = adjacent.size();
     }
 
+    public int getValue() {
+        return value;
+    }
 
+    public int getRow() {
+        return row;
+    }
+
+    public void setRow(int row) {
+        this.row = row;
+    }
+
+    public int getColumn() {
+        return column;
+    }
+
+    public void setColumn(int column) {
+        this.column = column;
+    }
+
+    public void addAdjacent(Block block){
+        adjacent.add(block);
+    }
 }
