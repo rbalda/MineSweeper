@@ -16,7 +16,17 @@ public class BlockUI extends Button {
 
     public BlockUI(Context context) {
         super(context);
-        isCovered = true;
+        Drawable d = getResources().getDrawable(R.drawable.block_states);
+        setBackground(d);
+
+
+        setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setEnabled(false);
+                setPressed(true);
+            }
+        });
     }
 
     public BlockUI(Context context, AttributeSet attrs) {
@@ -27,13 +37,13 @@ public class BlockUI extends Button {
         super(context, attrs, defStyle);
     }
 
-    public void setDefaults()
+    /*public void setDefaults()
     {
         isCovered = true;
 
         this.setBackgroundResource(R.drawable.button_states);
 
-    }
+    }*/
 
     public void discover() {
         isCovered = false;
