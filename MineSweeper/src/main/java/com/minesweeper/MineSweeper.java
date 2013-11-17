@@ -70,7 +70,7 @@ public class MineSweeper extends Activity {
                 createGamePanel();
                 showGamePanel();
                 clock.start();
-                setMinesOnGamePanel(10,4,5);
+                //setMinesOnGamePanel(10,4,5);
                 animationDrawable.start();
 
             }

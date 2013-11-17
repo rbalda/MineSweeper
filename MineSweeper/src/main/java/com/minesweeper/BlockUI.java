@@ -17,18 +17,11 @@ public class BlockUI extends ImageView {
     private Block block;
     private Smile smile;
 
-    public BlockUI(Context context,int r, int c) {
+    public BlockUI(Context context, int r, int c) {
         super(context);
         Drawable d = getResources().getDrawable(R.drawable.block_states);
         setBackground(d);
 
-
-        setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setEnabled(false);
-            }
-        });
 
         setOnTouchListener(new OnTouchListener() {
             @Override
@@ -39,7 +32,7 @@ public class BlockUI extends ImageView {
                         smile.surprising();
                         break;
                     case MotionEvent.ACTION_UP:
-                        setEnabled(false);
+                        setPressed(true);
                         smile.normalizing();
                         break;
                 }
@@ -71,11 +64,11 @@ public class BlockUI extends ImageView {
         setEnabled(isCovered);
     }
 
-    public void setValue(int v){
-         this.block.setValue(v);
+    public void setValue(int v) {
+        this.block.setValue(v);
     }
 
-    public int getValue(){
+    public int getValue() {
         return block.getValue();
     }
 
@@ -83,15 +76,13 @@ public class BlockUI extends ImageView {
         return block;
     }
 
-    public void addAdjacent(BlockUI block){
+    public void addAdjacent(BlockUI block) {
         this.block.addAdjacent(block.getBlock());
     }
 
     public String toString() {
-        return Integer.toString(block.getValue()+1);
+        return Integer.toString(block.getValue() + 1);
     }
-
-
 
 
     public void setSmile(Smile s) {
