@@ -5,7 +5,7 @@ import android.widget.TextView;
 /**
  * Created by ReneAlexander on 13/11/13.
  */
-public class Counter implements Observer {
+public class Counter {
     private int count;
     private TextView counterGUI;
 
@@ -18,13 +18,13 @@ public class Counter implements Observer {
         this.count = count;
     }
 
-    @Override
+  /*  @Override
     public void update() {
         if (count > 0) {
             count--;
             counterGUI.setText(Integer.toString(count));
         }
-    }
+    }*/
 
     public int getCount() {
         return count;
