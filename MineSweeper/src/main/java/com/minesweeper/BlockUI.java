@@ -4,15 +4,18 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 /**
  * Created by ReneAlexander on 06/11/13.
  */
-public class BlockUI extends Button {
+public class BlockUI extends ImageView {
     private boolean isCovered;
     private Block block;
+    private Smile smile;
 
     public BlockUI(Context context) {
         super(context);
@@ -24,9 +27,27 @@ public class BlockUI extends Button {
             @Override
             public void onClick(View v) {
                 setEnabled(false);
-                setPressed(true);
             }
         });
+
+        setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                int e = event.getAction();
+                switch (e) {
+                    case MotionEvent.ACTION_DOWN:
+                        smile.surprising();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        setEnabled(false);
+                        smile.normalizing();
+                        break;
+                }
+                return true;
+            }
+        });
+
+
     }
 
     public BlockUI(Context context, AttributeSet attrs) {
@@ -51,8 +72,7 @@ public class BlockUI extends Button {
     }
 
 
-
-
-
-
+    public void setSmile(Smile s) {
+        smile = s;
+    }
 }
