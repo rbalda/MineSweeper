@@ -1,6 +1,8 @@
 package com.minesweeper;
 
 import android.app.Activity;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.View;
@@ -76,27 +78,33 @@ public class MineSweeper extends Activity {
 
         for (int row = 0; row < nOrInGamePanel + 2; row++) {
             for (int column = 0; column < nOcInGamePanel + 2; column++) {
-                blocks[row][column] = new BlockUI(this);
-                blocks[row][column].setDefaults(row,column);
+                blocks[row][column] = new BlockUI(this,row,column);
 
                 final int cRow = row;
                 final int cColumn = column;
 
-               /* blocks[row][column].setOnClickListener(new View.OnClickListener() {
+                blocks[row][column].setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         if(!isPressed){
-                            if(blocks[cRow][cColumn].getValue()!= -1)
-                                blocks[cRow][cColumn].setBackgroundResource(R.drawable.button_selected);
-                            else
+                            if(blocks[cRow][cColumn].getValue()!= -1){
+                                blocks[cRow][cColumn].setTextColor(Color.CYAN);
+                                blocks[cRow][cColumn].setText(blocks[cRow][cColumn].toString());
                                 blocks[cRow][cColumn].setBackgroundResource(R.drawable.hole);
+                            }else
+                                blocks[cRow][cColumn].setBackgroundResource(R.drawable.button_selected);
                             isPressed=true;
+                            blocks[cRow][cColumn].setClickable(false);
                         }else if(isPressed){
-                            blocks[cRow][cColumn].setBackgroundResource(R.drawable.button_selected);
+
+                            if(blocks[cRow][cColumn].getValue()!= -1)
+                                blocks[cRow][cColumn].setBackgroundResource(R.drawable.hole);
+                            else
+                                blocks[cRow][cColumn].setBackgroundResource(R.drawable.button_selected);
                             isPressed=false;
                         }
                     }
-                });*/
+                });
             }
         }
     }
@@ -119,18 +127,38 @@ public class MineSweeper extends Activity {
     }
 
     private void setMinesOnGamePanel(int nMines, int cColumn, int cRow){
-                 Random rand = new Random();
-                 int d_mines = 0;
-                 while (d_mines < nMines){
-                         int mine_c = rand.nextInt(nOcInGamePanel);
-                         int mine_r = rand.nextInt(nOrInGamePanel);
-                         if(mine_r+1 != cRow || mine_c+1!=cColumn){
-                                 if (blocks[mine_r][mine_c].getValue() >= 0){
-                                         d_mines += 1;
-                                         blocks[mine_r][mine_c].setValue(-1);
-                                     }
-                            }
+        Random rand = new Random();
+        int d_mines = 0;
+        while (d_mines < nMines){
+             int mine_c = rand.nextInt(nOcInGamePanel);
+             int mine_r = rand.nextInt(nOrInGamePanel);
+             if(mine_r+1 != cRow || mine_c+1!=cColumn){
+                     if (blocks[mine_r][mine_c].getValue() >= 0){
+                             d_mines += 1;
+                             blocks[mine_r][mine_c].setValue(-1);
+                     }
+            }
         }
+
+        for (int row = 1; row < nOrInGamePanel + 1; row++) {
+
+            for (int column = 1; column < nOcInGamePanel + 1; column++) {
+                if(blocks[row][column].getValue()== -1){
+                    for(int x=row-1; x<=row+1; x++){
+                        for(int y=column-1; y<=column+1; y++){
+                            if(y!=column && x!=row)
+                                blocks[x][y].addAdjacent(blocks[row][column]);
+                        }
+
+                    }
+                }
+
+            }
+
+
+
+        }
+
     }
 
 }

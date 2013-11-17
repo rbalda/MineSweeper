@@ -14,10 +14,13 @@ public class BlockUI extends Button {
     private boolean isCovered;
     private Block block;
 
-    public BlockUI(Context context) {
+    public BlockUI(Context context,int r, int c) {
         super(context);
-        Drawable d = getResources().getDrawable(R.drawable.block_states);
-        //setBackground(d);
+        block=new Block(r,c);
+        isCovered = true;
+        this.setBackgroundResource(R.drawable.block_states);
+        /*Drawable d = getResources().getDrawable(R.drawable.block_states);
+        setBackground(d);
 
 
         setOnClickListener(new OnClickListener() {
@@ -26,7 +29,7 @@ public class BlockUI extends Button {
                 setEnabled(false);
                 setPressed(true);
             }
-        });
+        });*/
     }
 
     public BlockUI(Context context, AttributeSet attrs) {
@@ -39,10 +42,7 @@ public class BlockUI extends Button {
 
     public void setDefaults(int r, int c)
     {
-        block=new Block(r,c);
-        isCovered = true;
 
-        this.setBackgroundResource(R.drawable.button_states);
 
     }
 
@@ -59,8 +59,16 @@ public class BlockUI extends Button {
         return block.getValue();
     }
 
-    public void addAdjacent(Block block){
-        this.block.addAdjacent(block);
+    public Block getBlock() {
+        return block;
+    }
+
+    public void addAdjacent(BlockUI block){
+        this.block.addAdjacent(block.getBlock());
+    }
+
+    public String toString() {
+        return Integer.toString(block.getValue()+1);
     }
 
 
