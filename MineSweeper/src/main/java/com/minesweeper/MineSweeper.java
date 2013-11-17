@@ -90,7 +90,7 @@ public class MineSweeper extends Activity {
         for (int row = 0; row < nOrInGamePanel + 2; row++) {
             for (int column = 0; column < nOcInGamePanel + 2; column++) {
                 blocks[row][column] = new BlockUI(this,row,column);
-                blocks[row][column] = new BlockUI(this);
+
                 blocks[row][column].setSmile(btnSmile);
                 //blocks[row][column].setDefaults();
 
