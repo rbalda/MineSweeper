@@ -17,7 +17,7 @@ public class BlockUI extends Button {
     public BlockUI(Context context) {
         super(context);
         Drawable d = getResources().getDrawable(R.drawable.block_states);
-        setBackground(d);
+        //setBackground(d);
 
 
         setOnClickListener(new OnClickListener() {
@@ -37,20 +37,31 @@ public class BlockUI extends Button {
         super(context, attrs, defStyle);
     }
 
-    /*public void setDefaults()
+    public void setDefaults(int r, int c)
     {
+        block=new Block(r,c);
         isCovered = true;
 
         this.setBackgroundResource(R.drawable.button_states);
 
-    }*/
+    }
 
     public void discover() {
         isCovered = false;
         setEnabled(isCovered);
     }
 
+    public void setValue(int v){
+         this.block.setValue(v);
+    }
 
+    public int getValue(){
+        return block.getValue();
+    }
+
+    public void addAdjacent(Block block){
+        this.block.addAdjacent(block);
+    }
 
 
 
