@@ -33,6 +33,7 @@ public class Block {
     }
 
     public void setValue() {
+        if(this.value!=-1)
         this.value = adjacent.size();
     }
 
@@ -58,5 +59,6 @@ public class Block {
 
     public void addAdjacent(Block block){
         adjacent.add(block);
+        this.value = adjacent.size();
     }
 }

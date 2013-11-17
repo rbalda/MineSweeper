@@ -17,7 +17,7 @@ public class BlockUI extends ImageView {
     private Block block;
     private Smile smile;
 
-    public BlockUI(Context context) {
+    public BlockUI(Context context,int r, int c) {
         super(context);
         Drawable d = getResources().getDrawable(R.drawable.block_states);
         setBackground(d);
@@ -70,6 +70,28 @@ public class BlockUI extends ImageView {
         isCovered = false;
         setEnabled(isCovered);
     }
+
+    public void setValue(int v){
+         this.block.setValue(v);
+    }
+
+    public int getValue(){
+        return block.getValue();
+    }
+
+    public Block getBlock() {
+        return block;
+    }
+
+    public void addAdjacent(BlockUI block){
+        this.block.addAdjacent(block.getBlock());
+    }
+
+    public String toString() {
+        return Integer.toString(block.getValue()+1);
+    }
+
+
 
 
     public void setSmile(Smile s) {
