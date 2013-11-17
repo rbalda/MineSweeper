@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:oneshot="false">
+    <item
+        android:drawable="@drawable/shiny0"
+        android:duration="100" />
+    <item
+        android:drawable="@drawable/shiny1"
+        android:duration="100" />
+    <item
+        android:drawable="@drawable/shiny2"
+        android:duration="100" />
+    <item
+        android:drawable="@drawable/shiny3"
+        android:duration="100" />
+    <item
+        android:drawable="@drawable/shiny4"
+        android:duration="100" />
+    <item
+        android:drawable="@drawable/shiny5"
+        android:duration="100" />
+    <item
+        android:drawable="@drawable/shiny0"
+        android:duration="2000" />
+</animation-list>
