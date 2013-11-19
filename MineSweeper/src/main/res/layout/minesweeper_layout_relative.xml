@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background">
+
+    <TextView
+        android:layout_marginTop="10dp"
+        android:id="@+id/Clock"
+        android:layout_width="wrap_content"
+        android:layout_height="70dp"
+        android:gravity="center_horizontal"
+        android:textColor="#FFFFFF"
+        android:textSize="60sp"
+        android:text="000"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/Smile"
+        android:layout_marginRight="184dp" />
+
+    <ImageButton
+        android:layout_marginTop="10dp"
+        android:id="@+id/Smile"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:background="@drawable/smile_states"
+        android:scaleType="center"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/Count"
+        android:layout_width="wrap_content"
+        android:layout_height="70dp"
+        android:gravity="right"
+        android:textColor="#FFFFFF"
+        android:textSize="60sp"
+        android:text="000"
+        android:layout_alignTop="@+id/Clock"
+        android:layout_toRightOf="@+id/Smile"
+        android:layout_marginLeft="184dp" />
+
+    <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_marginTop="100dp"
+        android:id="@+id/game_panel"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center_horizontal"
+        android:layout_span="4"></TableLayout>
+
+    <ImageView
+        android:id="@+id/flag"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shield"
+        android:scaleType="center"
+        android:layout_gravity="right"
+        android:layout_width="wrap_content"
+        android:layout_alignBottom="@+id/Clock"
+        android:layout_toRightOf="@+id/Smile"
+        android:layout_marginLeft="124dp" />
+
+</RelativeLayout>
