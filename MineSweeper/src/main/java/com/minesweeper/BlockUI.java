@@ -2,25 +2,38 @@ package com.minesweeper;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 /**
  * Created by ReneAlexander on 06/11/13.
  */
-public class BlockUI extends ImageView {
+public class BlockUI extends FrameLayout {
     private boolean isCovered;
     private Block block;
     private Smile smile;
+    private MineSweeper mineSweeper;
 
-    public BlockUI(Context context, int r, int c) {
+
+    public BlockUI(Context context, int r, int c, MineSweeper m) {
         super(context);
         Drawable d = getResources().getDrawable(R.drawable.block_states);
         setBackground(d);
+        setPadding(-10, -10, -10, -10);
+        block = new Block(r, c);
+        mineSweeper = m;
 
 
         setOnTouchListener(new OnTouchListener() {
@@ -30,10 +43,35 @@ public class BlockUI extends ImageView {
                 switch (e) {
                     case MotionEvent.ACTION_DOWN:
                         smile.surprising();
+                        if (!mineSweeper.isStarted()) {
+                            mineSweeper.setStarted(true);
+                            mineSweeper.setMinesOnGamePanel(10, getBlock().getRow(), getBlock().getColumn());
+                        }
                         break;
                     case MotionEvent.ACTION_UP:
                         setPressed(true);
                         smile.normalizing();
+                        break;
+                }
+                return true;
+            }
+        });
+
+        setOnDragListener(new OnDragListener() {
+            @Override
+            public boolean onDrag(View v, DragEvent event) {
+                int action = event.getAction();
+                switch (action) {
+                    case DragEvent.ACTION_DROP:
+
+                        View view = (View) event.getLocalState();
+                        ViewGroup owner = (ViewGroup) view.getParent();
+                        view.setScaleX((float) .8);
+                        view.setScaleY((float) .8);
+
+                        owner.removeView(view);
+                        //if(owner instanceof BlockUI)
+                        addView(view);
                         break;
                 }
                 return true;
@@ -87,5 +125,25 @@ public class BlockUI extends ImageView {
 
     public void setSmile(Smile s) {
         smile = s;
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        Paint paint = new Paint();
+        paint.setStyle(Paint.Style.FILL);
+        paint.setStrokeWidth(1);
+        paint.setColor(Color.WHITE);
+        paint.setTextSize(20);
+        int imgWidth = getMeasuredWidth();
+        int imgHeight = getMeasuredHeight();
+        float txtWidth = paint.measureText("1");
+
+        int x = (int) (imgWidth / 2 - txtWidth / 2);
+        int y = imgHeight / 2 - 6;
+        if (isPressed())
+            canvas.drawText("1", x, y, paint);
+
+
     }
 }
