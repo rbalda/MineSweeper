@@ -27,7 +27,9 @@ public class MineSweeper extends Activity {
     private Smile btnSmile;
     private boolean isPressed = false;
     private HashMap<Level, LevelData> levels;
-    private ImageView shield;
+    private boolean isStarted = false;
+
+    private Shield shield;
 
     private AnimationDrawable animationDrawable;
 
@@ -46,17 +48,16 @@ public class MineSweeper extends Activity {
         levels.put(Level.BEGINNER, new LevelData(9, 9, 10));
         levels.put(Level.INTERMEDIATE, new LevelData(16, 16, 40));
         levels.put(Level.EXPERT, new LevelData(16, 30, 99));
-
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.minesweeper_layout);
+        setContentView(R.layout.minesweeper_layout_relative);
         TextView t = (TextView) findViewById(R.id.Clock);
-        shield = (ImageView) findViewById(R.id.flag);
-        shield.setBackgroundResource(R.drawable.shield);
-        animationDrawable = (AnimationDrawable) shield.getBackground();
+        shield = new Shield((ImageView) findViewById(R.id.flag));
+
+        animationDrawable = (AnimationDrawable) shield.getS().getBackground();
         clock = new Clock(t);
 
         gamePanel = (TableLayout) findViewById(R.id.game_panel);
@@ -69,8 +70,8 @@ public class MineSweeper extends Activity {
             public void onClick(View view) {
                 createGamePanel();
                 showGamePanel();
+                setMinesOnGamePanel(10, 4, 5);
                 clock.start();
-                //setMinesOnGamePanel(10,4,5);
                 animationDrawable.start();
 
             }
@@ -89,7 +90,7 @@ public class MineSweeper extends Activity {
 
         for (int row = 0; row < nOrInGamePanel + 2; row++) {
             for (int column = 0; column < nOcInGamePanel + 2; column++) {
-                blocks[row][column] = new BlockUI(this,row,column);
+                blocks[row][column] = new BlockUI(this, row, column, this);
 
                 blocks[row][column].setSmile(btnSmile);
                 //blocks[row][column].setDefaults();
@@ -130,27 +131,27 @@ public class MineSweeper extends Activity {
         }
     }
 
-    private void setMinesOnGamePanel(int nMines, int cColumn, int cRow){
+    public void setMinesOnGamePanel(int nMines, int cColumn, int cRow) {
         Random rand = new Random();
         int d_mines = 0;
-        while (d_mines < nMines){
-             int mine_c = rand.nextInt(nOcInGamePanel);
-             int mine_r = rand.nextInt(nOrInGamePanel);
-             if(mine_r+1 != cRow || mine_c+1!=cColumn){
-                     if (blocks[mine_r][mine_c].getValue() >= 0){
-                             d_mines += 1;
-                             blocks[mine_r][mine_c].setValue(-1);
-                     }
+        while (d_mines < nMines) {
+            int mine_c = rand.nextInt(nOcInGamePanel);
+            int mine_r = rand.nextInt(nOrInGamePanel);
+            if (mine_r + 1 != cRow || mine_c + 1 != cColumn) {
+                if (blocks[mine_r][mine_c].getValue() >= 0) {
+                    d_mines += 1;
+                    blocks[mine_r][mine_c].setValue(-1);
+                }
             }
         }
 
         for (int row = 1; row < nOrInGamePanel + 1; row++) {
 
             for (int column = 1; column < nOcInGamePanel + 1; column++) {
-                if(blocks[row][column].getValue()== -1){
-                    for(int x=row-1; x<=row+1; x++){
-                        for(int y=column-1; y<=column+1; y++){
-                            if(y!=column && x!=row)
+                if (blocks[row][column].getValue() == -1) {
+                    for (int x = row - 1; x <= row + 1; x++) {
+                        for (int y = column - 1; y <= column + 1; y++) {
+                            if (y != column && x != row)
                                 blocks[x][y].addAdjacent(blocks[row][column]);
                         }
 
@@ -160,9 +161,15 @@ public class MineSweeper extends Activity {
             }
 
 
-
         }
 
     }
 
+    public boolean isStarted() {
+        return isStarted;
+    }
+
+    public void setStarted(boolean isStarted) {
+        this.isStarted = isStarted;
+    }
 }
