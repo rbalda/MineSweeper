@@ -1,5 +1,6 @@
 package com.minesweeper;
 
+import android.app.ActionBar;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -8,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -25,12 +27,15 @@ public class BlockUI extends FrameLayout {
     private Block block;
     private Smile smile;
     private MineSweeper mineSweeper;
+    private int dimension;
 
 
     public BlockUI(Context context, int r, int c, MineSweeper m) {
         super(context);
         Drawable d = getResources().getDrawable(R.drawable.block_states);
         setBackground(d);
+
+        //setLayoutParams(new LayoutParams(dimension,dimension));
         setPadding(-10, -10, -10, -10);
         block = new Block(r, c);
         mineSweeper = m;
@@ -62,12 +67,19 @@ public class BlockUI extends FrameLayout {
             public boolean onDrag(View v, DragEvent event) {
                 int action = event.getAction();
                 switch (action) {
+                    case DragEvent.ACTION_DRAG_STARTED:
+                        View viewTemp = (View) event.getLocalState();
+                        viewTemp.setScaleX((float) .5);
+                        viewTemp.setScaleY((float) .5);
+                        break;
+
                     case DragEvent.ACTION_DROP:
 
                         View view = (View) event.getLocalState();
                         ViewGroup owner = (ViewGroup) view.getParent();
-                        view.setScaleX((float) .8);
-                        view.setScaleY((float) .8);
+                        view.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        view.setScaleX((float) .5);
+                        view.setScaleY((float) .5);
 
                         owner.removeView(view);
                         //if(owner instanceof BlockUI)
