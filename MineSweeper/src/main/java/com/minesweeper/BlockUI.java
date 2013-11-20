@@ -28,6 +28,7 @@ public class BlockUI extends FrameLayout {
     private Smile smile;
     private MineSweeper mineSweeper;
     private int dimension;
+    private boolean exploreState;
 
 
     public BlockUI(Context context, int r, int c, MineSweeper m) {
@@ -101,17 +102,25 @@ public class BlockUI extends FrameLayout {
         super(context, attrs, defStyle);
     }
 
-    /*public void setDefaults()
-    {
-        isCovered = true;
+    public void setCovered(boolean isCovered) {
+        this.isCovered = isCovered;
+    }
 
-        this.setBackgroundResource(R.drawable.button_states);
-
-    }*/
+    public boolean isCovered() {
+        return isCovered;
+    }
 
     public void discover() {
         isCovered = false;
         setEnabled(isCovered);
+    }
+
+    public boolean isExploreState() {
+        return exploreState;
+    }
+
+    public void setExploreState(boolean exploreState) {
+        this.exploreState = exploreState;
     }
 
     public void setValue(int v) {

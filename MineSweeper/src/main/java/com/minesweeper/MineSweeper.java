@@ -81,7 +81,6 @@ public class MineSweeper extends Activity {
 
     }
 
-
     public void startGame() {
 
     }
@@ -99,18 +98,28 @@ public class MineSweeper extends Activity {
                 final int cRow = row;
                 final int cColumn = column;
 
-               /* blocks[row][column].setOnClickListener(new View.OnClickListener() {
+                blocks[row][column].setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         if(!isPressed){
-                            blocks[cRow][cColumn].setBackgroundResource(R.drawable.button_selected);
+                            if(blocks[cRow][cColumn].getValue()!= -1){
+                                blocks[cRow][cColumn].setTextColor(Color.CYAN);
+                                blocks[cRow][cColumn].setText(blocks[cRow][cColumn].toString());
+                                blocks[cRow][cColumn].setBackgroundResource(R.drawable.hole);
+                            }else
+                                blocks[cRow][cColumn].setBackgroundResource(R.drawable.button_selected);
                             isPressed=true;
+                            blocks[cRow][cColumn].setClickable(false);
                         }else if(isPressed){
-                            blocks[cRow][cColumn].setBackgroundResource(R.drawable.button_selected);
+
+                            if(blocks[cRow][cColumn].getValue()!= -1)
+                                blocks[cRow][cColumn].setBackgroundResource(R.drawable.hole);
+                            else
+                                blocks[cRow][cColumn].setBackgroundResource(R.drawable.button_selected);
                             isPressed=false;
                         }
                     }
-                });*/
+                });
             }
         }
     }
@@ -167,6 +176,87 @@ public class MineSweeper extends Activity {
         }
 
     }
+
+    /*private void exploreBlocksR(int cRow, int cColumn){
+        if(blocks[cRow][cColumn].getValue()==-1){
+            return;
+        }
+
+        blocks[cRow][cColumn].setCovered(true);
+
+        if(blocks[cRow][cColumn].getValue()>0){
+            return;
+        }
+
+        for(int row=0;row<3;row++){
+            for(int col=0;col<3;col++){
+                if (blocks[cRow + row - 1][cColumn + col - 1].isCovered()
+                        && (cRow + row - 1 > 0) && (cColumn + col - 1 > 0)
+                        && (cRow + row - 1 < nOrInGamePanel + 1) && (cColumn + col - 1 < nOcInGamePanel + 1))
+                {
+                    exploreBlocksR(cRow + row - 1, cColumn + col - 1 );
+                }
+            }
+        }
+        return;
+
+    }*/
+
+    private boolean explore(BlockUI block) {
+
+        if(block.getValue()==-1){
+            return true;
+        }else{
+            for(int row=0; row<nOrInGamePanel;row++){
+                for(int col=0; col<nOcInGamePanel;col++){
+                    blocks[row][col].setExploreState(false);
+                }
+
+            }
+            exploreRec(block);
+        }
+        return false;
+    }
+
+    private void exploreRec( BlockUI block ) {
+        if (block.isExploreState())
+            return;
+        block.setExploreState(true);
+
+        block.setCovered(false);
+
+        if ( block.getValue() > 0 )
+            return;
+
+        int cRow = block.getBlock().getRow();
+        int cCol = block.getBlock().getColumn();
+
+        if ( ( cRow > 0) && ( cCol > 0 ) )
+            exploreRec(blocks[cRow - 1][cCol - 1]);
+
+        if ( cRow > 0 )
+            exploreRec(blocks[cRow - 1][cCol]);
+
+        if ( ( cRow > 0 ) && ( cCol < nOcInGamePanel - 1 ) )
+            exploreRec(blocks[cRow - 1][cCol + 1]);
+
+        if ( cCol > 0 )
+            exploreRec(blocks[cRow][cCol - 1]);
+
+        if ( cCol < nOcInGamePanel - 1 )
+            exploreRec(blocks[cRow][cCol + 1]);
+
+        if ( cRow < nOrInGamePanel - 1 )
+            exploreRec(blocks[cRow + 1][cCol]);
+
+        if ( ( cRow < nOrInGamePanel - 1 ) && ( cCol < nOcInGamePanel - 1 ) )
+            exploreRec(blocks[cRow + 1][cCol + 1]);
+
+        if ( ( cRow < nOrInGamePanel - 1 ) && ( cCol > 0 ) )
+            exploreRec(blocks[cRow + 1][cCol - 1]);
+
+    }
+
 
     public boolean isStarted() {
         return isStarted;
