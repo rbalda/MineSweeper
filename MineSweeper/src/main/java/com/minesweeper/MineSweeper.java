@@ -86,10 +86,10 @@ public class MineSweeper extends Activity {
     }
 
     private void createGamePanel() {
-        blocks = new BlockUI[nOrInGamePanel + 2][nOcInGamePanel + 2];
+        blocks = new BlockUI[nOrInGamePanel][nOcInGamePanel];
 
-        for (int row = 0; row < nOrInGamePanel + 2; row++) {
-            for (int column = 0; column < nOcInGamePanel + 2; column++) {
+        for (int row = 0; row < nOrInGamePanel; row++) {
+            for (int column = 0; column < nOcInGamePanel; column++) {
                 blocks[row][column] = new BlockUI(this, row, column, this);
 
                 blocks[row][column].setSmile(btnSmile);
@@ -98,7 +98,7 @@ public class MineSweeper extends Activity {
                 final int cRow = row;
                 final int cColumn = column;
 
-                blocks[row][column].setOnClickListener(new View.OnClickListener() {
+              /*  blocks[row][column].setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         if(!isPressed){
@@ -119,7 +119,7 @@ public class MineSweeper extends Activity {
                             isPressed=false;
                         }
                     }
-                });
+                });*/
             }
         }
     }
@@ -127,13 +127,20 @@ public class MineSweeper extends Activity {
     private void showGamePanel() {
 
         int dimension = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, getResources().getDisplayMetrics());
-        for (int row = 1; row < nOrInGamePanel + 1; row++) {
+        for (int row = 0; row < nOrInGamePanel; row++) {
             TableRow tableRow = new TableRow(this);
             tableRow.setLayoutParams(new LayoutParams((blockDimension + 2 * blockPadding) * nOcInGamePanel, blockDimension + 2 * blockPadding));
             tableRow.setGravity(android.view.Gravity.CENTER_HORIZONTAL);
-            for (int column = 1; column < nOcInGamePanel + 1; column++) {
+            for (int column = 0; column < nOcInGamePanel; column++) {
                 blocks[row][column].setLayoutParams(new LayoutParams(dimension, dimension));
+                for (int x = row - 1; x <= row + 1; x++) {
+                    for (int y = column - 1; y <= column + 1; y++) {
+                        if (y != column && x != row)
+                            blocks[row][column].addAdjacentUI(blocks[x][y]);
+                    }
+                }
                 //blocks[row][column].setPadding(blockPadding, blockPadding, blockPadding, blockPadding);
+
                 tableRow.addView(blocks[row][column]);
             }
 
@@ -157,9 +164,9 @@ public class MineSweeper extends Activity {
             }
         }
 
-        for (int row = 1; row < nOrInGamePanel + 1; row++) {
+        for (int row = 0; row < nOrInGamePanel; row++) {
 
-            for (int column = 1; column < nOcInGamePanel + 1; column++) {
+            for (int column = 0; column < nOcInGamePanel; column++) {
                 if (blocks[row][column].getValue() == -1) {
                     for (int x = row - 1; x <= row + 1; x++) {
                         for (int y = column - 1; y <= column + 1; y++) {
@@ -204,11 +211,11 @@ public class MineSweeper extends Activity {
 
     private boolean explore(BlockUI block) {
 
-        if(block.getValue()==-1){
+        if (block.getValue() == -1) {
             return true;
-        }else{
-            for(int row=0; row<nOrInGamePanel;row++){
-                for(int col=0; col<nOcInGamePanel;col++){
+        } else {
+            for (int row = 0; row < nOrInGamePanel; row++) {
+                for (int col = 0; col < nOcInGamePanel; col++) {
                     blocks[row][col].setExploreState(false);
                 }
 
@@ -218,41 +225,41 @@ public class MineSweeper extends Activity {
         return false;
     }
 
-    private void exploreRec( BlockUI block ) {
+    private void exploreRec(BlockUI block) {
         if (block.isExploreState())
             return;
         block.setExploreState(true);
 
         block.setCovered(false);
 
-        if ( block.getValue() > 0 )
+        if (block.getValue() > 0)
             return;
 
         int cRow = block.getBlock().getRow();
         int cCol = block.getBlock().getColumn();
 
-        if ( ( cRow > 0) && ( cCol > 0 ) )
+        if ((cRow > 0) && (cCol > 0))
             exploreRec(blocks[cRow - 1][cCol - 1]);
 
-        if ( cRow > 0 )
+        if (cRow > 0)
             exploreRec(blocks[cRow - 1][cCol]);
 
-        if ( ( cRow > 0 ) && ( cCol < nOcInGamePanel - 1 ) )
+        if ((cRow > 0) && (cCol < nOcInGamePanel - 1))
             exploreRec(blocks[cRow - 1][cCol + 1]);
 
-        if ( cCol > 0 )
+        if (cCol > 0)
             exploreRec(blocks[cRow][cCol - 1]);
 
-        if ( cCol < nOcInGamePanel - 1 )
+        if (cCol < nOcInGamePanel - 1)
             exploreRec(blocks[cRow][cCol + 1]);
 
-        if ( cRow < nOrInGamePanel - 1 )
+        if (cRow < nOrInGamePanel - 1)
             exploreRec(blocks[cRow + 1][cCol]);
 
-        if ( ( cRow < nOrInGamePanel - 1 ) && ( cCol < nOcInGamePanel - 1 ) )
+        if ((cRow < nOrInGamePanel - 1) && (cCol < nOcInGamePanel - 1))
             exploreRec(blocks[cRow + 1][cCol + 1]);
 
-        if ( ( cRow < nOrInGamePanel - 1 ) && ( cCol > 0 ) )
+        if ((cRow < nOrInGamePanel - 1) && (cCol > 0))
             exploreRec(blocks[cRow + 1][cCol - 1]);
 
     }

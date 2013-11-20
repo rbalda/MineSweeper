@@ -19,6 +19,9 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+
 /**
  * Created by ReneAlexander on 06/11/13.
  */
@@ -29,12 +32,14 @@ public class BlockUI extends FrameLayout {
     private MineSweeper mineSweeper;
     private int dimension;
     private boolean exploreState;
+    private ArrayList<BlockUI> adjacentUI;
 
 
     public BlockUI(Context context, int r, int c, MineSweeper m) {
         super(context);
         Drawable d = getResources().getDrawable(R.drawable.block_states);
         setBackground(d);
+        adjacentUI = new ArrayList<BlockUI>();
 
         //setLayoutParams(new LayoutParams(dimension,dimension));
         setPadding(-10, -10, -10, -10);
@@ -57,6 +62,7 @@ public class BlockUI extends FrameLayout {
                     case MotionEvent.ACTION_UP:
                         setPressed(true);
                         smile.normalizing();
+                        uncover();
                         break;
                 }
                 return true;
@@ -140,7 +146,7 @@ public class BlockUI extends FrameLayout {
     }
 
     public String toString() {
-        return Integer.toString(block.getValue() + 1);
+        return Integer.toString(block.getValue());
     }
 
 
@@ -162,9 +168,25 @@ public class BlockUI extends FrameLayout {
 
         int x = (int) (imgWidth / 2 - txtWidth / 2);
         int y = imgHeight / 2 - 6;
+        String temp = this.toString();
         if (isPressed())
-            canvas.drawText("1", x, y, paint);
+            canvas.drawText(temp, x, y, paint);
 
 
+    }
+
+    public void addAdjacentUI(BlockUI b) {
+        adjacentUI.add(b);
+    }
+
+    public void uncover() {
+        if (this.getValue() > 0) {
+            this.setPressed(true);
+        }
+        /*else{
+            for(BlockUI b:adjacentUI){
+                b.uncover();
+            }
+        }*/
     }
 }
