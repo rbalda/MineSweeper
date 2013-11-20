@@ -13,6 +13,7 @@ import android.widget.Button;
 public class BlockUI extends Button {
     private boolean isCovered;
     private Block block;
+    private boolean exploreState;
 
     public BlockUI(Context context,int r, int c) {
         super(context);
@@ -40,15 +41,25 @@ public class BlockUI extends Button {
         super(context, attrs, defStyle);
     }
 
-    public void setDefaults(int r, int c)
-    {
+    public void setCovered(boolean isCovered) {
+        this.isCovered = isCovered;
+    }
 
-
+    public boolean isCovered() {
+        return isCovered;
     }
 
     public void discover() {
         isCovered = false;
         setEnabled(isCovered);
+    }
+
+    public boolean isExploreState() {
+        return exploreState;
+    }
+
+    public void setExploreState(boolean exploreState) {
+        this.exploreState = exploreState;
     }
 
     public void setValue(int v){
