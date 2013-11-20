@@ -5,6 +5,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.Display;
 import android.view.View;
 import android.widget.ImageButton;
@@ -115,13 +116,15 @@ public class MineSweeper extends Activity {
     }
 
     private void showGamePanel() {
+
+        int dimension = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, getResources().getDisplayMetrics());
         for (int row = 1; row < nOrInGamePanel + 1; row++) {
             TableRow tableRow = new TableRow(this);
             tableRow.setLayoutParams(new LayoutParams((blockDimension + 2 * blockPadding) * nOcInGamePanel, blockDimension + 2 * blockPadding));
             tableRow.setGravity(android.view.Gravity.CENTER_HORIZONTAL);
             for (int column = 1; column < nOcInGamePanel + 1; column++) {
-                blocks[row][column].setLayoutParams(new LayoutParams(60, 60));
-                blocks[row][column].setPadding(blockPadding, blockPadding, blockPadding, blockPadding);
+                blocks[row][column].setLayoutParams(new LayoutParams(dimension, dimension));
+                //blocks[row][column].setPadding(blockPadding, blockPadding, blockPadding, blockPadding);
                 tableRow.addView(blocks[row][column]);
             }
 
