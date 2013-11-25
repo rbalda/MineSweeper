@@ -58,11 +58,12 @@ public class BlockUI extends FrameLayout {
                             mineSweeper.setStarted(true);
                             mineSweeper.setMinesOnGamePanel(10, getBlock().getRow(), getBlock().getColumn());
                         }
+
                         break;
                     case MotionEvent.ACTION_UP:
-                        setPressed(true);
-                        smile.normalizing();
                         uncover();
+                        smile.normalizing();
+
                         break;
                 }
                 return true;
@@ -180,13 +181,15 @@ public class BlockUI extends FrameLayout {
     }
 
     public void uncover() {
-        if (this.getValue() > 0) {
+        if (this.getValue() >= 0) {
             this.setPressed(true);
+            return;
         }
-        /*else{
+        else{
             for(BlockUI b:adjacentUI){
                 b.uncover();
             }
-        }*/
+            return;
+        }
     }
 }

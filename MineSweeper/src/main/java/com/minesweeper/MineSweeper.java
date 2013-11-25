@@ -71,7 +71,7 @@ public class MineSweeper extends Activity {
             public void onClick(View view) {
                 createGamePanel();
                 showGamePanel();
-                setMinesOnGamePanel(10, 4, 5);
+                //setMinesOnGamePanel(10, 4, 5);
                 clock.start();
                 animationDrawable.start();
 
@@ -133,12 +133,15 @@ public class MineSweeper extends Activity {
             tableRow.setGravity(android.view.Gravity.CENTER_HORIZONTAL);
             for (int column = 0; column < nOcInGamePanel; column++) {
                 blocks[row][column].setLayoutParams(new LayoutParams(dimension, dimension));
-                for (int x = row - 1; x <= row + 1; x++) {
-                    for (int y = column - 1; y <= column + 1; y++) {
-                        if (y != column && x != row)
-                            blocks[row][column].addAdjacentUI(blocks[x][y]);
+                for (int x = row - 1; x <= row+1; x++) {
+                    for (int y = column - 1; y <= column+1; y++) {
+                        if (!(y == column && x == row)){
+                           if(x>=0 && y>=0 && x<nOrInGamePanel &&y<nOcInGamePanel)
+                                blocks[row][column].addAdjacentUI(blocks[x][y]);
+                        }
                     }
                 }
+                //
                 //blocks[row][column].setPadding(blockPadding, blockPadding, blockPadding, blockPadding);
 
                 tableRow.addView(blocks[row][column]);
@@ -148,6 +151,7 @@ public class MineSweeper extends Activity {
             gamePanel.addView(tableRow, new TableLayout.LayoutParams(
                     (blockDimension + 2 * blockPadding) * nOcInGamePanel, blockDimension + 2 * blockPadding));
         }
+        //
     }
 
     public void setMinesOnGamePanel(int nMines, int cColumn, int cRow) {
@@ -170,8 +174,10 @@ public class MineSweeper extends Activity {
                 if (blocks[row][column].getValue() == -1) {
                     for (int x = row - 1; x <= row + 1; x++) {
                         for (int y = column - 1; y <= column + 1; y++) {
-                            if (y != column && x != row)
-                                blocks[x][y].addAdjacent(blocks[row][column]);
+                            if (!(y == column && x == row)){
+                                if(x>=0 && y>=0 && x<nOrInGamePanel &&y<nOcInGamePanel)
+                                    blocks[x][y].addAdjacent(blocks[row][column]);
+                            }
                         }
 
                     }
