@@ -63,7 +63,6 @@ public class BlockUI extends FrameLayout {
                     case MotionEvent.ACTION_UP:
                         uncover();
                         smile.normalizing();
-
                         break;
                 }
                 return true;
@@ -181,15 +180,21 @@ public class BlockUI extends FrameLayout {
     }
 
     public void uncover() {
-        if (this.getValue() >= 0) {
+        if(this.getValue()==-1)
+            return;
+        if (this.getValue() > 0) {
             this.setPressed(true);
             return;
         }
-        else{
+        if(this.getValue()==0){
+            this.setPressed(true);
             for(BlockUI b:adjacentUI){
                 b.uncover();
+
             }
             return;
         }
+
+
     }
 }
