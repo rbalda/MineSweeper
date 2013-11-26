@@ -37,23 +37,7 @@ public class Shield {
                         View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
                         v.startDrag(null, shadowBuilder, v, 0);
                         break;
-                    //case MotionEvent.ACTION_MOVE:
-                    //   getS().setX((int) event.getRawX() - getS().getWidth() / 2);
-                    //  getS().setY((int) event.getRawY() - getS().getHeight() / 2);
-                    //  break;
-                    case MotionEvent.ACTION_UP:
-                        if (!(v.getParent() instanceof BlockUI)) {
-                            getS().setX((float) oldX);
-                            getS().setY((float) oldY);
-                            getS().setScaleX((float) 1.0);
-                            getS().setScaleY((float) 1.0);
-                        }
-
-                        break;
-                    //else{
-
-                    //}
-                }
+                    }
 
                 return true;
             }

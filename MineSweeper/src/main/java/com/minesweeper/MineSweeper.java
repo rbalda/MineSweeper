@@ -29,6 +29,7 @@ public class MineSweeper extends Activity {
     private boolean isPressed = false;
     private HashMap<Level, LevelData> levels;
     private boolean isStarted = false;
+    private boolean isMined= false;
 
     private Shield shield;
 
@@ -69,10 +70,10 @@ public class MineSweeper extends Activity {
         btnSmile.getButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createGamePanel();
-                showGamePanel();
+                if(!isStarted())
+                    startGame();
                 //setMinesOnGamePanel(10, 4, 5);
-                clock.start();
+
                 animationDrawable.start();
 
             }
@@ -82,7 +83,10 @@ public class MineSweeper extends Activity {
     }
 
     public void startGame() {
-
+        isStarted=true;
+        createGamePanel();
+        showGamePanel();
+        clock.start();
     }
 
     private void createGamePanel() {
@@ -155,6 +159,7 @@ public class MineSweeper extends Activity {
     }
 
     public void setMinesOnGamePanel(int nMines, int cColumn, int cRow) {
+        isMined= true;
         Random rand = new Random();
         int d_mines = 0;
         while (d_mines <= nMines) {
@@ -164,6 +169,7 @@ public class MineSweeper extends Activity {
                 if (blocks[mine_r][mine_c].getValue() >= 0) {
                     d_mines += 1;
                     blocks[mine_r][mine_c].setValue(-1);
+
                 }
             }
         }
@@ -232,7 +238,7 @@ public class MineSweeper extends Activity {
     }
 
     private void exploreRec(BlockUI block) {
-        if (block.isExploreState())
+        if (block.isExploreState()||block.isShielded())
             return;
         block.setExploreState(true);
 
@@ -278,4 +284,6 @@ public class MineSweeper extends Activity {
     public void setStarted(boolean isStarted) {
         this.isStarted = isStarted;
     }
+
+    public boolean isMined(){return isMined;}
 }

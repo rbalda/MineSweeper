@@ -33,6 +33,8 @@ public class BlockUI extends FrameLayout {
     private int dimension;
     private boolean exploreState;
     private ArrayList<BlockUI> adjacentUI;
+    private final int colours[]= {Color.MAGENTA,Color.CYAN, Color.YELLOW,Color.WHITE,Color.GREEN,Color.RED,Color.LTGRAY,Color.MAGENTA};
+    private boolean isShielded = false;
 
 
     public BlockUI(Context context, int r, int c, MineSweeper m) {
@@ -41,8 +43,9 @@ public class BlockUI extends FrameLayout {
         setBackground(d);
         adjacentUI = new ArrayList<BlockUI>();
 
+
         //setLayoutParams(new LayoutParams(dimension,dimension));
-        setPadding(-10, -10, -10, -10);
+        //setPadding(-10, -10, -10, -10);
         block = new Block(r, c);
         mineSweeper = m;
 
@@ -55,15 +58,13 @@ public class BlockUI extends FrameLayout {
                 switch (e) {
                     case MotionEvent.ACTION_DOWN:
                         smile.surprising();
-                        if (!mineSweeper.isStarted()) {
-                            mineSweeper.setStarted(true);
-                            mineSweeper.setMinesOnGamePanel(10, getBlock().getRow(), getBlock().getColumn());
+                        if (!mineSweeper.isMined()) {
+                             mineSweeper.setMinesOnGamePanel(10, getBlock().getRow(), getBlock().getColumn());
                         }
 
                         break;
                     case MotionEvent.ACTION_UP:
                         mineSweeper.explore(f);
-                        //uncover();
                         smile.normalizing();
                         break;
                 }
@@ -78,6 +79,9 @@ public class BlockUI extends FrameLayout {
                 switch (action) {
                     case DragEvent.ACTION_DRAG_STARTED:
                         View viewTemp = (View) event.getLocalState();
+                        ViewGroup ownerTemp = (ViewGroup)viewTemp.getParent();
+                        if(ownerTemp instanceof BlockUI)
+                            ((BlockUI) ownerTemp).isShielded=false;
                         viewTemp.setScaleX((float) .5);
                         viewTemp.setScaleY((float) .5);
                         break;
@@ -86,13 +90,14 @@ public class BlockUI extends FrameLayout {
 
                         View view = (View) event.getLocalState();
                         ViewGroup owner = (ViewGroup) view.getParent();
-                        view.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        view.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
                         view.setScaleX((float) .5);
                         view.setScaleY((float) .5);
 
                         owner.removeView(view);
-                        //if(owner instanceof BlockUI)
-                        addView(view);
+                        if(!isPressed())
+                            addView(view);
+                        isShielded=true;
                         break;
                 }
                 return true;
@@ -162,17 +167,19 @@ public class BlockUI extends FrameLayout {
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
         paint.setStrokeWidth(1);
-        paint.setColor(Color.WHITE);
-        paint.setTextSize(20);
+        paint.setColor(colours[getBlock().getValue()]);
+        paint.setTextSize(30);
         int imgWidth = getMeasuredWidth();
         int imgHeight = getMeasuredHeight();
         float txtWidth = paint.measureText("1");
 
         int x = (int) (imgWidth / 2 - txtWidth / 2);
-        int y = imgHeight / 2 - 6;
-        String temp = this.toString();
-        if (isPressed())
-            canvas.drawText(temp, x, y, paint);
+        int y = imgHeight/2 + (int)(txtWidth/1.5);
+        if(getBlock().getValue()>0){
+            String temp = this.toString();
+                if (isPressed())
+                canvas.drawText(temp, x, y, paint);
+        }
 
 
     }
@@ -199,5 +206,9 @@ public class BlockUI extends FrameLayout {
         }
 
 
+    }
+
+    public boolean isShielded(){
+        return isShielded;
     }
 }
