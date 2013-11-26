@@ -157,7 +157,7 @@ public class MineSweeper extends Activity {
     public void setMinesOnGamePanel(int nMines, int cColumn, int cRow) {
         Random rand = new Random();
         int d_mines = 0;
-        while (d_mines < nMines) {
+        while (d_mines <= nMines) {
             int mine_c = rand.nextInt(nOcInGamePanel);
             int mine_r = rand.nextInt(nOrInGamePanel);
             if (mine_r + 1 != cRow || mine_c + 1 != cColumn) {
@@ -215,7 +215,7 @@ public class MineSweeper extends Activity {
 
     }*/
 
-    private boolean explore(BlockUI block) {
+    public boolean explore(BlockUI block) {
 
         if (block.getValue() == -1) {
             return true;
@@ -236,7 +236,7 @@ public class MineSweeper extends Activity {
             return;
         block.setExploreState(true);
 
-        block.setCovered(false);
+        block.setPressed(true);
 
         if (block.getValue() > 0)
             return;

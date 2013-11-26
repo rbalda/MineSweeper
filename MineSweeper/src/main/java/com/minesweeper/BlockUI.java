@@ -51,6 +51,7 @@ public class BlockUI extends FrameLayout {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 int e = event.getAction();
+                BlockUI f = (BlockUI)v;
                 switch (e) {
                     case MotionEvent.ACTION_DOWN:
                         smile.surprising();
@@ -61,7 +62,8 @@ public class BlockUI extends FrameLayout {
 
                         break;
                     case MotionEvent.ACTION_UP:
-                        uncover();
+                        mineSweeper.explore(f);
+                        //uncover();
                         smile.normalizing();
                         break;
                 }
@@ -179,6 +181,7 @@ public class BlockUI extends FrameLayout {
         adjacentUI.add(b);
     }
 
+
     public void uncover() {
         if(this.getValue()==-1)
             return;
@@ -190,9 +193,9 @@ public class BlockUI extends FrameLayout {
             this.setPressed(true);
             for(BlockUI b:adjacentUI){
                 b.uncover();
-
+                return;
             }
-            return;
+
         }
 
 
