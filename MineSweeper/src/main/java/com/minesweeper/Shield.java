@@ -14,13 +14,13 @@ import android.widget.RelativeLayout;
  */
 public class Shield {
     ImageView s;
-    String msg;
+
     RelativeLayout.LayoutParams layoutParams;
     int oldX = 0;
     int oldY = 0;
 
-    public Shield(ImageView s) {
-        this.s = s;
+    public Shield(ImageView shield) {
+        this.s = shield;
         s.setScaleX((float) .5);
         s.setScaleY((float) .5);
         s.setBackgroundResource(R.drawable.shield);
@@ -30,13 +30,14 @@ public class Shield {
                 int op = event.getAction();
                 switch (op) {
                     case MotionEvent.ACTION_DOWN:
-                        oldX = (int) getS().getX();
-                        oldY = (int) getS().getY();
-                        //getS().setScaleX((float) 0.45);
-                        //getS().setScaleY((float) 0.45);
+                        //oldX = (int) getS().getX();
+                        //oldY = (int) getS().getY();
+                        getS().setScaleX((float) 0.45);
+                        getS().setScaleY((float) 0.45);
                         View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
                         v.startDrag(null, shadowBuilder, v, 0);
                         break;
+
                     }
 
                 return true;

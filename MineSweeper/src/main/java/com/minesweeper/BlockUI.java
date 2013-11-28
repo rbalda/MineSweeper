@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -75,11 +76,13 @@ public class BlockUI extends FrameLayout {
         setOnDragListener(new OnDragListener() {
             @Override
             public boolean onDrag(View v, DragEvent event) {
+
                 int action = event.getAction();
                 switch (action) {
                     case DragEvent.ACTION_DRAG_STARTED:
                         View viewTemp = (View) event.getLocalState();
                         ViewGroup ownerTemp = (ViewGroup)viewTemp.getParent();
+
                         if(ownerTemp instanceof BlockUI)
                             ((BlockUI) ownerTemp).isShielded=false;
                         viewTemp.setScaleX((float) .5);
@@ -87,16 +90,25 @@ public class BlockUI extends FrameLayout {
                         break;
 
                     case DragEvent.ACTION_DROP:
-
                         View view = (View) event.getLocalState();
                         ViewGroup owner = (ViewGroup) view.getParent();
-                        view.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
-                        view.setScaleX((float) .5);
-                        view.setScaleY((float) .5);
+                        //view.setScaleX((float) .5);
+                        //view.setScaleY((float) .5);
 
                         owner.removeView(view);
-                        if(!isPressed())
+                        if(!isPressed()){
                             addView(view);
+                            view.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+                            if(owner instanceof RelativeLayout)
+                            mineSweeper.counter.decrement();
+                        }
+                        else{
+                            if(!(owner instanceof RelativeLayout) )
+                            owner.addView(view);
+                            view.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+                        }
                         isShielded=true;
                         break;
                 }

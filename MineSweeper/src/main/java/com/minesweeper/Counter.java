@@ -16,6 +16,22 @@ public class Counter {
 
     public void setCount(int count) {
         this.count = count;
+        updateCount();
+    }
+
+    public void decrement(){
+        count--;
+        updateCount();
+    }
+
+    private void updateCount(){
+        if (count < 10) {
+            counterGUI.setText("00" + Integer.toString(count));
+        } else if (count < 100) {
+            counterGUI.setText("0" + Integer.toString(count));
+        } else {
+            counterGUI.setText(Integer.toString(count));
+        }
     }
 
   /*  @Override
@@ -29,4 +45,6 @@ public class Counter {
     public int getCount() {
         return count;
     }
+
+
 }

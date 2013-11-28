@@ -39,7 +39,7 @@ public class Clock implements Runnable {
 
         time.postDelayed(this, 1000);
 
-        if (count > MAX_COUNT)
+        if (count >= MAX_COUNT)
             stop();
     }
 

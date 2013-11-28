@@ -7,9 +7,11 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.Display;
+import android.view.DragEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.LinearLayout;
 import android.widget.TableRow;
@@ -30,8 +32,10 @@ public class MineSweeper extends Activity {
     private HashMap<Level, LevelData> levels;
     private boolean isStarted = false;
     private boolean isMined= false;
-
-    private Shield shield;
+    private Shield shields[];
+    private ImageView shieldsUI[];
+    //private Shield shield;
+    public Counter counter;
 
     private AnimationDrawable animationDrawable;
 
@@ -57,9 +61,11 @@ public class MineSweeper extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.minesweeper_layout_relative);
         TextView t = (TextView) findViewById(R.id.Clock);
-        shield = new Shield((ImageView) findViewById(R.id.flag));
+        //shield = new Shield((ImageView) findViewById(R.id.flag));
+        initShields();
 
-        animationDrawable = (AnimationDrawable) shield.getS().getBackground();
+
+        //animationDrawable = (AnimationDrawable) shield.getS().getBackground();
         clock = new Clock(t);
 
         gamePanel = (TableLayout) findViewById(R.id.game_panel);
@@ -73,13 +79,38 @@ public class MineSweeper extends Activity {
                 if(!isStarted())
                     startGame();
                 //setMinesOnGamePanel(10, 4, 5);
-
-                animationDrawable.start();
-
             }
         });
 
 
+    }
+
+    public void initShields(){
+        RelativeLayout main = (RelativeLayout)findViewById(R.id.relative_layout);
+        counter = new Counter((TextView)findViewById(R.id.Count));
+        counter.setCount(10);
+        ImageView temp= (ImageView)findViewById(R.id.flag);
+        main.removeView(temp);
+        shields = new Shield[10];
+        shieldsUI = new ImageView[10];
+        //(ImageView)findViewById(R.id.flag).get;
+        for(int i=0;i<10;i++){
+            shieldsUI[i]=new ImageView(this);
+            shieldsUI[i].setBackground(temp.getBackground());
+            shieldsUI[i].setLayoutParams(temp.getLayoutParams());
+            main.addView(shieldsUI[i]);
+            shields[i] = new Shield(shieldsUI[i]);
+        }
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        for(int i=0;i<10;i++){
+            AnimationDrawable d = (AnimationDrawable)shieldsUI[i].getBackground();
+            d.start();
+        }
+        //animationDrawable.start();
     }
 
     public void startGame() {
