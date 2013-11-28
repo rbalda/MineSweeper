@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -65,7 +66,10 @@ public class BlockUI extends FrameLayout {
 
                         break;
                     case MotionEvent.ACTION_UP:
+                        if(getValue()>-1)
                         mineSweeper.explore(f);
+                        else
+                        setPressed(true);
                         smile.normalizing();
                         break;
                 }
@@ -178,19 +182,31 @@ public class BlockUI extends FrameLayout {
         super.onDraw(canvas);
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
-        paint.setStrokeWidth(1);
-        paint.setColor(colours[getBlock().getValue()]);
+        //paint.setStrokeWidth(1);
+
         paint.setTextSize(30);
         int imgWidth = getMeasuredWidth();
         int imgHeight = getMeasuredHeight();
         float txtWidth = paint.measureText("1");
-
-        int x = (int) (imgWidth / 2 - txtWidth / 2);
-        int y = imgHeight/2 + (int)(txtWidth/1.5);
+        int x=0,y=0;
         if(getBlock().getValue()>0){
+            x = (int) (imgWidth / 2 - txtWidth / 2);
+            y = imgHeight/2 + (int)(txtWidth/1.5);
+
+            paint.setColor(colours[getBlock().getValue()]);
             String temp = this.toString();
                 if (isPressed())
                 canvas.drawText(temp, x, y, paint);
+        }
+        else if(getBlock().getValue()==-1){
+            x = (int)(imgWidth/5);
+
+
+            Bitmap b = BitmapFactory.decodeResource(this.getResources(),R.drawable.minesweeperlogo);
+            b = b.createScaledBitmap(b,25,25,false);
+
+            if(isPressed())
+            canvas.drawBitmap(b,x,x,paint);
         }
 
 

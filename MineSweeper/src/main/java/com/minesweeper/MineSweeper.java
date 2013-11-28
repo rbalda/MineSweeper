@@ -1,6 +1,7 @@
 package com.minesweeper;
 
 import android.app.Activity;
+import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -34,7 +35,6 @@ public class MineSweeper extends Activity {
     private boolean isMined= false;
     private Shield shields[];
     private ImageView shieldsUI[];
-    //private Shield shield;
     public Counter counter;
 
     private AnimationDrawable animationDrawable;
@@ -61,6 +61,8 @@ public class MineSweeper extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.minesweeper_layout_relative);
         TextView t = (TextView) findViewById(R.id.Clock);
+
+
         //shield = new Shield((ImageView) findViewById(R.id.flag));
         initShields();
 
@@ -87,6 +89,7 @@ public class MineSweeper extends Activity {
 
     public void initShields(){
         RelativeLayout main = (RelativeLayout)findViewById(R.id.relative_layout);
+
         counter = new Counter((TextView)findViewById(R.id.Count));
         counter.setCount(10);
         ImageView temp= (ImageView)findViewById(R.id.flag);
@@ -98,6 +101,8 @@ public class MineSweeper extends Activity {
             shieldsUI[i]=new ImageView(this);
             shieldsUI[i].setBackground(temp.getBackground());
             shieldsUI[i].setLayoutParams(temp.getLayoutParams());
+            shieldsUI[i].setScaleX((float) .45);
+            shieldsUI[i].setScaleY((float) .45);
             main.addView(shieldsUI[i]);
             shields[i] = new Shield(shieldsUI[i]);
         }
@@ -317,4 +322,15 @@ public class MineSweeper extends Activity {
     }
 
     public boolean isMined(){return isMined;}
+
+    public void loadFonts(TextView t){
+        Typeface lcdFont = Typeface.createFromAsset(getAssets(),
+                "fonts/digital-7 (mono).ttf");
+        t.setTypeface(lcdFont);
+        t.setTypeface(lcdFont);
+        t.setScaleX((float)1.2);
+        t.setScaleY((float)1.2);
+
+    }
+
 }
