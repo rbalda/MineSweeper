@@ -198,13 +198,13 @@ public class MineSweeper extends Activity {
         isMined= true;
         Random rand = new Random();
         int d_mines = 0;
-        while (d_mines <= nMines) {
+        while (d_mines < nMines) {
             int mine_c = rand.nextInt(nOcInGamePanel);
             int mine_r = rand.nextInt(nOrInGamePanel);
             if (mine_r + 1 != cRow || mine_c + 1 != cColumn) {
                 if (blocks[mine_r][mine_c].getValue() >= 0) {
-                    d_mines += 1;
                     blocks[mine_r][mine_c].setValue(-1);
+                    d_mines += 1;
 
                 }
             }

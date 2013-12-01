@@ -165,7 +165,10 @@ public class BlockUI extends FrameLayout {
     }
 
     public void addAdjacent(BlockUI block) {
-        this.block.addAdjacent(block.getBlock());
+        if(!(this.getValue()==-1))
+            this.block.addAdjacent(block.getBlock());
+        else
+            return;
     }
 
     public String toString() {
