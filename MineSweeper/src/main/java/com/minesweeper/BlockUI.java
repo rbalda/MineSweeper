@@ -12,6 +12,7 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.DragEvent;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,11 +67,19 @@ public class BlockUI extends FrameLayout {
 
                         break;
                     case MotionEvent.ACTION_UP:
+                        if(mineSweeper.hasWon()){
+
+                        }
+                        mineSweeper.popUpWinner.showAtLocation(mineSweeper.gamePanel, Gravity.CENTER, 0, 0);
+                        mineSweeper.popUpWinner.update(50, 50, 300, 80);
                         if(getValue()>-1)
                         mineSweeper.explore(f);
-                        else
+                        else{
                         setPressed(true);
+                        mineSweeper.endGame();
                         smile.normalizing();
+                        }
+
                         break;
                 }
                 return true;
@@ -85,10 +94,10 @@ public class BlockUI extends FrameLayout {
                 switch (action) {
                     case DragEvent.ACTION_DRAG_STARTED:
                         View viewTemp = (View) event.getLocalState();
-                        ViewGroup ownerTemp = (ViewGroup)viewTemp.getParent();
+                        ViewGroup ownerTemp = (ViewGroup) viewTemp.getParent();
 
-                        if(ownerTemp instanceof BlockUI)
-                            ((BlockUI) ownerTemp).isShielded=false;
+                        if (ownerTemp instanceof BlockUI)
+                            ((BlockUI) ownerTemp).isShielded = false;
                         viewTemp.setScaleX((float) .5);
                         viewTemp.setScaleY((float) .5);
                         break;
@@ -100,20 +109,25 @@ public class BlockUI extends FrameLayout {
                         //view.setScaleY((float) .5);
 
                         owner.removeView(view);
-                        if(!isPressed()){
+                        if (!isPressed()) {
                             addView(view);
                             view.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
-                            if(owner instanceof RelativeLayout)
-                            mineSweeper.counter.decrement();
-                        }
-                        else{
-                            if(!(owner instanceof RelativeLayout) )
-                            owner.addView(view);
+                            if (owner instanceof RelativeLayout)
+                                mineSweeper.counter.decrement();
+
+
+                        } else {
+                            if (!(owner instanceof RelativeLayout))
+                                owner.addView(view);
                             view.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
                         }
-                        isShielded=true;
+                        isShielded = true;
+                        if(mineSweeper.hasWon()){
+                            mineSweeper.popUpWinner.showAtLocation(mineSweeper.gamePanel, Gravity.TOP, 10, 10);
+                            mineSweeper.popUpWinner.update(50, 50, 300, 80);
+                        }
                         break;
                 }
                 return true;
