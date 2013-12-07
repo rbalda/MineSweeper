@@ -9,6 +9,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
+import android.os.Vibrator;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.DragEvent;
@@ -37,6 +38,7 @@ public class BlockUI extends FrameLayout {
     private ArrayList<BlockUI> adjacentUI;
     private final int colours[]= {Color.MAGENTA,Color.CYAN, Color.YELLOW,Color.WHITE,Color.GREEN,Color.RED,Color.LTGRAY,Color.MAGENTA};
     private boolean isShielded = false;
+    private Vibrator vb;
 
 
     public BlockUI(Context context, int r, int c, MineSweeper m) {
@@ -44,6 +46,7 @@ public class BlockUI extends FrameLayout {
         Drawable d = getResources().getDrawable(R.drawable.block_states);
         setBackground(d);
         adjacentUI = new ArrayList<BlockUI>();
+        vb = (Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE);
 
 
         //setLayoutParams(new LayoutParams(dimension,dimension));
@@ -68,8 +71,10 @@ public class BlockUI extends FrameLayout {
                     case MotionEvent.ACTION_UP:
                         if(getValue()>-1)
                         mineSweeper.explore(f);
-                        else
+                        else{
                         setPressed(true);
+                            vb.vibrate(500);
+                        }
                         smile.normalizing();
                         break;
                 }
@@ -85,10 +90,10 @@ public class BlockUI extends FrameLayout {
                 switch (action) {
                     case DragEvent.ACTION_DRAG_STARTED:
                         View viewTemp = (View) event.getLocalState();
-                        ViewGroup ownerTemp = (ViewGroup)viewTemp.getParent();
+                        ViewGroup ownerTemp = (ViewGroup) viewTemp.getParent();
 
-                        if(ownerTemp instanceof BlockUI)
-                            ((BlockUI) ownerTemp).isShielded=false;
+                        if (ownerTemp instanceof BlockUI)
+                            ((BlockUI) ownerTemp).isShielded = false;
                         viewTemp.setScaleX((float) .5);
                         viewTemp.setScaleY((float) .5);
                         break;
@@ -100,20 +105,19 @@ public class BlockUI extends FrameLayout {
                         //view.setScaleY((float) .5);
 
                         owner.removeView(view);
-                        if(!isPressed()){
+                        if (!isPressed()) {
                             addView(view);
                             view.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
-                            if(owner instanceof RelativeLayout)
-                            mineSweeper.counter.decrement();
-                        }
-                        else{
-                            if(!(owner instanceof RelativeLayout) )
-                            owner.addView(view);
+                            if (owner instanceof RelativeLayout)
+                                mineSweeper.counter.decrement();
+                        } else {
+                            if (!(owner instanceof RelativeLayout))
+                                owner.addView(view);
                             view.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
                         }
-                        isShielded=true;
+                        isShielded = true;
                         break;
                 }
                 return true;
