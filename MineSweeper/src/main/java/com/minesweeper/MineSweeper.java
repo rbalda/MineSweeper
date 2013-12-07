@@ -10,14 +10,18 @@ import android.util.TypedValue;
 import android.view.Display;
 import android.view.DragEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.LinearLayout;
 import android.widget.TableRow;
 import android.widget.TableRow.LayoutParams;
 import android.widget.TextView;
+
 
 import java.util.HashMap;
 import java.util.Random;
@@ -27,11 +31,12 @@ import java.util.Random;
  */
 public class MineSweeper extends Activity {
     private Clock clock;
-    private TableLayout gamePanel; // table layout to add mines to
+    public TableLayout gamePanel; // table layout to add mines to
     private Smile btnSmile;
     private boolean isPressed = false;
     private HashMap<Level, LevelData> levels;
     private boolean isStarted = false;
+    private boolean isOver = false;
     private boolean isMined= false;
     private Shield shields[];
     private ImageView shieldsUI[];
@@ -48,6 +53,13 @@ public class MineSweeper extends Activity {
     private int nOcInGamePanel = 16;
     private int totalNumberOfMines = 10;
 
+    public PopupWindow popUpWinner;
+    private LinearLayout layout;
+    private TextView tv;
+    private ViewGroup.LayoutParams params;
+    public EditText txtName;
+    private ViewGroup.LayoutParams partxt;
+
     //Method that initialize variables for the Game
     public void init() {
         levels = new HashMap<Level, LevelData>();
@@ -60,6 +72,20 @@ public class MineSweeper extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.minesweeper_layout_relative);
+
+        popUpWinner = new PopupWindow(this);
+        layout = new LinearLayout(this);
+        tv = new TextView(this);
+        txtName = new EditText(this);
+        params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        partxt = new ViewGroup.LayoutParams(300,100);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        tv.setText("You won congratz");
+        layout.addView(tv, params);
+        layout.addView(txtName, partxt);
+        popUpWinner.setContentView(layout);
+
         TextView t = (TextView) findViewById(R.id.Clock);
 
 
@@ -123,6 +149,20 @@ public class MineSweeper extends Activity {
         createGamePanel();
         showGamePanel();
         clock.start();
+    }
+
+    public void endGame(){
+        clock.stop();
+        isStarted=false;
+        isOver=true;
+
+        for (int row = 0; row < nOrInGamePanel; row++) {
+            for (int column = 0; column < nOcInGamePanel; column++) {
+                if(blocks[row][column].getValue()==-1){
+                    blocks[row][column].setPressed(true);
+                }
+            }
+        }
     }
 
     private void createGamePanel() {
@@ -198,13 +238,13 @@ public class MineSweeper extends Activity {
         isMined= true;
         Random rand = new Random();
         int d_mines = 0;
-        while (d_mines <= nMines) {
+        while (d_mines < nMines) {
             int mine_c = rand.nextInt(nOcInGamePanel);
             int mine_r = rand.nextInt(nOrInGamePanel);
             if (mine_r + 1 != cRow || mine_c + 1 != cColumn) {
                 if (blocks[mine_r][mine_c].getValue() >= 0) {
-                    d_mines += 1;
                     blocks[mine_r][mine_c].setValue(-1);
+                    d_mines += 1;
 
                 }
             }
@@ -312,6 +352,13 @@ public class MineSweeper extends Activity {
 
     }
 
+    public boolean isOver() {
+        return isOver;
+    }
+
+    public void setOver(boolean isOver) {
+        this.isOver = isOver;
+    }
 
     public boolean isStarted() {
         return isStarted;
@@ -331,6 +378,29 @@ public class MineSweeper extends Activity {
         t.setScaleX((float)1.2);
         t.setScaleY((float)1.2);
 
+    }
+
+    public boolean hasWon(){
+        /*if(counter.getCount()>0)
+            return false;
+        */
+        int totalMinesMarked=0;
+        int totalBlocksPressed=0;
+
+        for (int row = 0; row < nOrInGamePanel; row++) {
+            for (int column = 0; column < nOcInGamePanel; column++) {
+                if(blocks[row][column].getValue()==-1 && blocks[row][column].isShielded() )
+                    totalMinesMarked++;
+
+                if(blocks[row][column].getValue()>-1 && blocks[row][column].isPressed())
+                    totalBlocksPressed++;
+            }
+        }
+
+        if(totalMinesMarked==10 && totalBlocksPressed==((nOcInGamePanel*nOrInGamePanel)-10))
+            return true;
+        else
+            return false;
     }
 
 }

@@ -13,6 +13,7 @@ import android.os.Vibrator;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.DragEvent;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,13 +70,20 @@ public class BlockUI extends FrameLayout {
 
                         break;
                     case MotionEvent.ACTION_UP:
+                        if(mineSweeper.hasWon()){
+
+                        }
+                        mineSweeper.popUpWinner.showAtLocation(mineSweeper.gamePanel, Gravity.CENTER, 0, 0);
+                        mineSweeper.popUpWinner.update(50, 50, 300, 80);
                         if(getValue()>-1)
                         mineSweeper.explore(f);
                         else{
                         setPressed(true);
+                        mineSweeper.endGame();
                             vb.vibrate(500);
                         }
-                        smile.normalizing();
+                        smile.normalizing();                    
+
                         break;
                 }
                 return true;
@@ -91,6 +99,7 @@ public class BlockUI extends FrameLayout {
                     case DragEvent.ACTION_DRAG_STARTED:
                         View viewTemp = (View) event.getLocalState();
                         ViewGroup ownerTemp = (ViewGroup) viewTemp.getParent();
+                        
 
                         if (ownerTemp instanceof BlockUI)
                             ((BlockUI) ownerTemp).isShielded = false;
@@ -109,15 +118,16 @@ public class BlockUI extends FrameLayout {
                             addView(view);
                             view.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
-                            if (owner instanceof RelativeLayout)
-                                mineSweeper.counter.decrement();
-                        } else {
-                            if (!(owner instanceof RelativeLayout))
-                                owner.addView(view);
+                            if(owner instanceof RelativeLayout)
+                            mineSweeper.counter.decrement();
+                        }
+                        else{
+                            if(!(owner instanceof RelativeLayout) )
+                            owner.addView(view);
                             view.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
                         }
-                        isShielded = true;
+                        isShielded=true;
                         break;
                 }
                 return true;
@@ -169,7 +179,10 @@ public class BlockUI extends FrameLayout {
     }
 
     public void addAdjacent(BlockUI block) {
-        this.block.addAdjacent(block.getBlock());
+        if(!(this.getValue()==-1))
+            this.block.addAdjacent(block.getBlock());
+        else
+            return;
     }
 
     public String toString() {
