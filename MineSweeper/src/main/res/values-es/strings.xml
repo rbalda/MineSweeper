@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Buscaminas</string>
+    <string name="new_game">Nuevo Juego</string>
+    <string name="high_scores">Altos Puntajes</string>
+    <string name="about">Acerca De</string>
+    <string name="exit">Salir</string>
+    <string name="novice">Facil</string>
+    <string name="normal">Normal</string>
+    <string name="expert">Experto</string>
+    <string name="back">Atras</string>
+    <string name="title_level_menu">Seleccione Nivel</string>
 </resources>
