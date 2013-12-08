@@ -1,6 +1,7 @@
 package com.minesweeper;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
 import android.content.res.ColorStateList;
@@ -41,6 +42,8 @@ public class MineSweeper extends Activity {
     private Shield shields[];
     private ImageView shieldsUI[];
     public Counter counter;
+    private Intent intent;
+
 
     private AnimationDrawable animationDrawable;
 
@@ -66,7 +69,10 @@ public class MineSweeper extends Activity {
         levels.put(Level.BEGINNER, new LevelData(9, 9, 10));
         levels.put(Level.INTERMEDIATE, new LevelData(16, 16, 40));
         levels.put(Level.EXPERT, new LevelData(16, 30, 99));
+
     }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,9 +112,11 @@ public class MineSweeper extends Activity {
             public void onClick(View view) {
                 if(!isStarted())
                     startGame();
+
                 //setMinesOnGamePanel(10, 4, 5);
             }
         });
+
 
 
     }
@@ -141,6 +149,9 @@ public class MineSweeper extends Activity {
             AnimationDrawable d = (AnimationDrawable)shieldsUI[i].getBackground();
             d.start();
         }
+        intent = new Intent(this,MainMenu.class);
+        startActivity(intent);
+
         //animationDrawable.start();
     }
 
@@ -272,30 +283,7 @@ public class MineSweeper extends Activity {
 
     }
 
-    /*private void exploreBlocksR(int cRow, int cColumn){
-        if(blocks[cRow][cColumn].getValue()==-1){
-            return;
-        }
 
-        blocks[cRow][cColumn].setCovered(true);
-
-        if(blocks[cRow][cColumn].getValue()>0){
-            return;
-        }
-
-        for(int row=0;row<3;row++){
-            for(int col=0;col<3;col++){
-                if (blocks[cRow + row - 1][cColumn + col - 1].isCovered()
-                        && (cRow + row - 1 > 0) && (cColumn + col - 1 > 0)
-                        && (cRow + row - 1 < nOrInGamePanel + 1) && (cColumn + col - 1 < nOcInGamePanel + 1))
-                {
-                    exploreBlocksR(cRow + row - 1, cColumn + col - 1 );
-                }
-            }
-        }
-        return;
-
-    }*/
 
     public boolean explore(BlockUI block) {
 
@@ -371,8 +359,7 @@ public class MineSweeper extends Activity {
     public boolean isMined(){return isMined;}
 
     public void loadFonts(TextView t){
-        Typeface lcdFont = Typeface.createFromAsset(getAssets(),
-                "fonts/digital-7 (mono).ttf");
+        Typeface lcdFont = Typeface.createFromAsset(getAssets(),"fonts/digital-7 (mono).ttf");
         t.setTypeface(lcdFont);
         t.setTypeface(lcdFont);
         t.setScaleX((float)1.2);
