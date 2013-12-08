@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+    android:layout_marginBottom="50dp"
+    >
+
+    <Button
+        android:layout_margin="5dp"
+        android:background="@drawable/button_states"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/novice"
+        android:textSize="50sp"
+        android:id="@+id/easy"
+        android:layout_gravity="center_horizontal"
+        />
+    <Button
+        android:layout_margin="5dp"
+        android:background="@drawable/button_states"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="50sp"
+        android:text="@string/normal"
+        android:id="@+id/normal"
+        android:layout_gravity="center_horizontal"
+        />
+
+    <Button
+        android:layout_margin="5dp"
+        android:background="@drawable/button_states"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/expert"
+        android:id="@+id/expert"
+        android:layout_gravity="center_horizontal"
+        android:textSize="50sp"
+        />
+    <Button
+        android:layout_margin="5dp"
+        android:background="@drawable/button_states"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/back"
+        android:id="@+id/back"
+        android:layout_gravity="center_horizontal"
+        android:textSize="50sp"
+        />
+</LinearLayout>
