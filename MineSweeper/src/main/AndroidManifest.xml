@@ -16,8 +16,8 @@
         android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen">
 
         <activity
-            android:name=".MineSweeper"
-            android:label="@string/app_name"
+            android:name=".MainMenu"
+            android:label=".MainMenu"
             android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,9 +25,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainMenu"
-            android:label="MainMenu"
-            android:screenOrientation="landscape"/>
+            android:name=".MineSweeper"
+            android:label="@string/app_name"
+            android:screenOrientation="landscape">
+
+        </activity>
+
     </application>
 
 

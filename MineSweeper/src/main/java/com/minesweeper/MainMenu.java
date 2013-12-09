@@ -3,6 +3,7 @@ package com.minesweeper;
 import android.app.Activity;
 import android.app.Dialog;
 
+import android.content.Intent;
 import android.graphics.Color;
 
 import android.graphics.Typeface;
@@ -87,20 +88,26 @@ public class MainMenu extends Activity {
         levelDialog.findViewById(R.id.easy).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainMenu.this.finish();
+                Intent int1 = new Intent(MainMenu.this,MineSweeper.class);
+                int1.putExtra("level",1);
+                startActivity(int1);
 
             }
         });
         levelDialog.findViewById(R.id.normal).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainMenu.this.finish();
+                Intent int1 = new Intent(MainMenu.this,MineSweeper.class);
+                int1.putExtra("level",2);
+                startActivity(int1);
             }
         });
         levelDialog.findViewById(R.id.expert).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainMenu.this.finish();
+                Intent int1 = new Intent(MainMenu.this,MineSweeper.class);
+                int1.putExtra("level",3);
+                startActivity(int1);
             }
         });
         levelDialog.findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
@@ -112,6 +119,8 @@ public class MainMenu extends Activity {
         });
 
     }
+
+
 
 
 

@@ -65,16 +65,16 @@ public class BlockUI extends FrameLayout {
                     case MotionEvent.ACTION_DOWN:
                         smile.surprising();
                         if (!mineSweeper.isMined()) {
-                             mineSweeper.setMinesOnGamePanel(10, getBlock().getRow(), getBlock().getColumn());
+                             mineSweeper.setMinesOnGamePanel(getBlock().getRow(), getBlock().getColumn());
                         }
 
                         break;
                     case MotionEvent.ACTION_UP:
                         if(mineSweeper.hasWon()){
-
+                            mineSweeper.gameFinishDialog.show();
+                            mineSweeper.endGame();
                         }
-                        mineSweeper.popUpWinner.showAtLocation(mineSweeper.gamePanel, Gravity.CENTER, 0, 0);
-                        mineSweeper.popUpWinner.update(50, 50, 300, 80);
+
                         if(getValue()>-1)
                         mineSweeper.explore(f);
                         else{

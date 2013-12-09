@@ -1,6 +1,7 @@
 package com.minesweeper;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
@@ -12,6 +13,7 @@ import android.view.Display;
 import android.view.DragEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -52,16 +54,11 @@ public class MineSweeper extends Activity {
     private int blockDimension = 60; // width of each block
     private int blockPadding = 2; // padding between blocks
 
-    private int nOrInGamePanel = 16;
-    private int nOcInGamePanel = 16;
-    private int totalNumberOfMines = 10;
+    private int nOrInGamePanel;
+    private int nOcInGamePanel;
+    private int totalNumberOfMines;
 
-    public PopupWindow popUpWinner;
-    private LinearLayout layout;
-    private TextView tv;
-    private ViewGroup.LayoutParams params;
-    public EditText txtName;
-    private ViewGroup.LayoutParams partxt;
+    public Dialog gameFinishDialog;
 
     //Method that initialize variables for the Game
     public void init() {
@@ -79,25 +76,18 @@ public class MineSweeper extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.minesweeper_layout_relative);
 
-        popUpWinner = new PopupWindow(this);
-        layout = new LinearLayout(this);
-        tv = new TextView(this);
-        txtName = new EditText(this);
-        params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-        partxt = new ViewGroup.LayoutParams(300,100);
-        layout.setOrientation(LinearLayout.VERTICAL);
-        tv.setText("You won congratz");
-        layout.addView(tv, params);
-        layout.addView(txtName, partxt);
-        popUpWinner.setContentView(layout);
+        init();
+
+        Bundle levelR = getIntent().getExtras();
+
+        extractLevel(levelR.getInt("level"));
 
         TextView t = (TextView) findViewById(R.id.Clock);
 
 
         //shield = new Shield((ImageView) findViewById(R.id.flag));
         initShields();
-
+        createLevelDialog();
 
         //animationDrawable = (AnimationDrawable) shield.getS().getBackground();
         clock = new Clock(t);
@@ -121,17 +111,60 @@ public class MineSweeper extends Activity {
 
     }
 
+    public void createLevelDialog(){
+        gameFinishDialog = new Dialog(MineSweeper.this,R.style.Menu);
+        gameFinishDialog.setTitle(getResources().getString(R.string.title_level_menu));
+        gameFinishDialog.setContentView(R.layout.finishdialog);
+        gameFinishDialog.findViewById(R.id.accept).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+
+            }
+        });
+
+        WindowManager.LayoutParams lp = gameFinishDialog.getWindow().getAttributes();
+        lp.dimAmount=0.5f;
+        lp.screenBrightness = 1.0F;
+        gameFinishDialog.getWindow().setAttributes(lp);
+        gameFinishDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        //setLevelButtonAction();
+    }
+
+    private void extractLevel(int value){
+        switch (value){
+            case 1:
+
+                nOcInGamePanel=levels.get(Level.BEGINNER).getColumn();
+                nOrInGamePanel=levels.get(Level.BEGINNER).getRows();
+                totalNumberOfMines=levels.get(Level.BEGINNER).getMinesNumber();
+                break;
+            case 2:
+                nOcInGamePanel=levels.get(Level.INTERMEDIATE).getColumn();
+                nOrInGamePanel=levels.get(Level.INTERMEDIATE).getRows();
+                totalNumberOfMines=levels.get(Level.INTERMEDIATE).getMinesNumber();
+                break;
+            case 3:
+                nOcInGamePanel=levels.get(Level.EXPERT).getColumn();
+                nOrInGamePanel=levels.get(Level.EXPERT).getRows();
+                totalNumberOfMines=levels.get(Level.EXPERT).getMinesNumber();
+                break;
+        }
+        return;
+    }
+
     public void initShields(){
         RelativeLayout main = (RelativeLayout)findViewById(R.id.relative_layout);
 
         counter = new Counter((TextView)findViewById(R.id.Count));
-        counter.setCount(10);
+        counter.setCount(totalNumberOfMines);
         ImageView temp= (ImageView)findViewById(R.id.flag);
         main.removeView(temp);
-        shields = new Shield[10];
-        shieldsUI = new ImageView[10];
+        shields = new Shield[totalNumberOfMines];
+        shieldsUI = new ImageView[totalNumberOfMines];
         //(ImageView)findViewById(R.id.flag).get;
-        for(int i=0;i<10;i++){
+        for(int i=0;i<totalNumberOfMines;i++){
             shieldsUI[i]=new ImageView(this);
             shieldsUI[i].setBackground(temp.getBackground());
             shieldsUI[i].setLayoutParams(temp.getLayoutParams());
@@ -145,12 +178,11 @@ public class MineSweeper extends Activity {
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        for(int i=0;i<10;i++){
+        for(int i=0;i<totalNumberOfMines;i++){
             AnimationDrawable d = (AnimationDrawable)shieldsUI[i].getBackground();
             d.start();
         }
-        intent = new Intent(this,MainMenu.class);
-        startActivity(intent);
+
 
         //animationDrawable.start();
     }
@@ -245,11 +277,11 @@ public class MineSweeper extends Activity {
         //
     }
 
-    public void setMinesOnGamePanel(int nMines, int cColumn, int cRow) {
+    public void setMinesOnGamePanel(int cColumn, int cRow) {
         isMined= true;
         Random rand = new Random();
         int d_mines = 0;
-        while (d_mines < nMines) {
+        while (d_mines < totalNumberOfMines) {
             int mine_c = rand.nextInt(nOcInGamePanel);
             int mine_r = rand.nextInt(nOrInGamePanel);
             if (mine_r + 1 != cRow || mine_c + 1 != cColumn) {
@@ -384,7 +416,7 @@ public class MineSweeper extends Activity {
             }
         }
 
-        if(totalMinesMarked==10 && totalBlocksPressed==((nOcInGamePanel*nOrInGamePanel)-10))
+        if(totalMinesMarked==totalNumberOfMines && totalBlocksPressed==((nOcInGamePanel*nOrInGamePanel)-totalNumberOfMines))
             return true;
         else
             return false;
