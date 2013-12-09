@@ -103,31 +103,32 @@ public class BlockUI extends FrameLayout {
 
                         if (ownerTemp instanceof BlockUI)
                             ((BlockUI) ownerTemp).isShielded = false;
-                        viewTemp.setScaleX((float) .5);
-                        viewTemp.setScaleY((float) .5);
+
                         break;
 
                     case DragEvent.ACTION_DROP:
                         View view = (View) event.getLocalState();
                         ViewGroup owner = (ViewGroup) view.getParent();
+
                         //view.setScaleX((float) .5);
                         //view.setScaleY((float) .5);
 
-                        owner.removeView(view);
-                        if (!isPressed()) {
-                            addView(view);
-                            view.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
+                        if (!isPressed()) {
+                            owner.removeView(view);
+                            addView(view);
                             if(owner instanceof RelativeLayout)
                             mineSweeper.counter.decrement();
                         }
                         else{
+
                             if(!(owner instanceof RelativeLayout) )
                             owner.addView(view);
-                            view.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
                         }
                         isShielded=true;
+                        if(mineSweeper.hasWon())
+                            mineSweeper.gameFinishDialog.show();
                         break;
                 }
                 return true;
