@@ -8,7 +8,9 @@ import android.graphics.drawable.AnimationDrawable;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.TypedValue;
+import android.util.Xml;
 import android.view.Display;
 import android.view.DragEvent;
 import android.view.View;
@@ -24,8 +26,15 @@ import android.widget.LinearLayout;
 import android.widget.TableRow;
 import android.widget.TableRow.LayoutParams;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlSerializer;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -57,13 +66,15 @@ public class MineSweeper extends Activity {
     private int nOrInGamePanel;
     private int nOcInGamePanel;
     private int totalNumberOfMines;
-
+    private String currentLevel;
     public Dialog gameFinishDialog;
+    public static final String TAG = "TratamientoXML";
+
 
     //Method that initialize variables for the Game
     public void init() {
         levels = new HashMap<Level, LevelData>();
-        levels.put(Level.BEGINNER, new LevelData(9, 9, 10));
+        levels.put(Level.BEGINNER, new LevelData(16, 16, 10));
         levels.put(Level.INTERMEDIATE, new LevelData(16, 16, 40));
         levels.put(Level.EXPERT, new LevelData(16, 30, 99));
 
@@ -118,9 +129,8 @@ public class MineSweeper extends Activity {
         gameFinishDialog.findViewById(R.id.accept).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
-
+                saveXml("Jimmy",currentLevel,counter.getCount());
+                readXml();
             }
         });
 
@@ -132,20 +142,111 @@ public class MineSweeper extends Activity {
         //setLevelButtonAction();
     }
 
+    private void saveXml(String name, String level, int time){
+        FileOutputStream fileOut =null;
+
+        try{
+            fileOut = openFileOutput("scores.xml", MODE_PRIVATE);
+
+        }catch (FileNotFoundException e){
+            Toast.makeText(this, e.getMessage(),Toast.LENGTH_SHORT).show();
+
+        }
+
+        XmlSerializer serializer = Xml.newSerializer();
+
+        try {
+            serializer.setOutput(fileOut, "UTF-8");
+            serializer.startDocument(null, true);
+            serializer.setFeature("http://xmlpull.org/v1/doc/features.html#indent-output", true);
+            serializer.startTag(null, "jugadores");
+            serializer.startTag(null, "jugador");
+
+            serializer.startTag(null,"nombre");
+            serializer.text(name);
+            serializer.endTag(null, "nombre");
+
+            serializer.startTag(null, "nivel");
+            serializer.text(level);
+            serializer.endTag(null, "nivel");
+
+            serializer.startTag(null,"tiempo");
+            serializer.text("" + time);
+            serializer.endTag(null, "tiempo");
+
+            serializer.endTag(null,"jugador");
+            serializer.endTag(null,"jugadores");
+
+            serializer.endDocument();
+            serializer.flush();
+            fileOut.close();
+
+            Toast.makeText(getApplicationContext(), "Escrito correctamente", Toast.LENGTH_LONG).show();
+
+        } catch (Exception e) {
+
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+
+        }
+
+
+    }
+
+    private void readXml() {
+        FileInputStream fileIn = null;
+
+        try{
+            fileIn = openFileInput("score.xml");
+
+        } catch(Exception e){
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+
+        XmlPullParser parser = Xml.newPullParser();
+        try {
+            parser.setInput(fileIn, "UTF-8");
+
+            int event = parser.next();
+            while(event != XmlPullParser.END_DOCUMENT) {
+                if(event == XmlPullParser.START_TAG) {
+                    Log.d(TAG, "<" + parser.getName() + ">");
+                    for(int i = 0; i < parser.getAttributeCount(); i++) {
+                        Log.d(TAG, "\t" + parser.getAttributeName(i) + " = " + parser.getAttributeValue(i));
+                    }
+                }
+
+                if(event == XmlPullParser.TEXT && parser.getText().trim().length() != 0)
+                    Log.d(TAG, "\t\t" + parser.getText());
+
+                if(event == XmlPullParser.END_TAG)
+                    Log.d(TAG, "</" + parser.getName() + ">");
+
+                event = parser.next();
+            }
+            fileIn.close();
+
+            Toast.makeText(this, "Leido correctamente", Toast.LENGTH_LONG).show();
+        } catch (Exception e) {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
     private void extractLevel(int value){
         switch (value){
             case 1:
-
+                currentLevel="Easy";
                 nOcInGamePanel=levels.get(Level.BEGINNER).getColumn();
                 nOrInGamePanel=levels.get(Level.BEGINNER).getRows();
                 totalNumberOfMines=levels.get(Level.BEGINNER).getMinesNumber();
                 break;
             case 2:
+                currentLevel="Normal";
                 nOcInGamePanel=levels.get(Level.INTERMEDIATE).getColumn();
                 nOrInGamePanel=levels.get(Level.INTERMEDIATE).getRows();
                 totalNumberOfMines=levels.get(Level.INTERMEDIATE).getMinesNumber();
                 break;
             case 3:
+                currentLevel="Expert";
                 nOcInGamePanel=levels.get(Level.EXPERT).getColumn();
                 nOrInGamePanel=levels.get(Level.EXPERT).getRows();
                 totalNumberOfMines=levels.get(Level.EXPERT).getMinesNumber();
