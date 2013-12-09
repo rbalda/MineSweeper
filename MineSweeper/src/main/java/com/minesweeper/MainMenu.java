@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Color;
 
 import android.graphics.Typeface;
+import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
@@ -29,12 +30,16 @@ public class MainMenu extends Activity {
     private Typeface font;
     private Dialog startDialog;
     private Dialog levelDialog;
+    private UserDataSource source;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mainmenu_layout);
+        source = new UserDataSource(this);
+        source.open();
+        User u = source.createUser("hello",3,"normal");
 
         createInitialDialog();
         createLevelDialog();
@@ -45,6 +50,8 @@ public class MainMenu extends Activity {
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         startDialog.show();
+        AnimationDrawable a = (AnimationDrawable)(findViewById(R.id.local_layout)).getBackground();
+        a.start();
     }
 
     public void createLevelDialog(){
