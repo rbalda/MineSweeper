@@ -79,8 +79,8 @@ public class BlockUI extends FrameLayout {
                             mineSweeper.gameLostDialog.show();
                         }
                         if(mineSweeper.hasWon()){
-                            mineSweeper.endGame();
                             mineSweeper.gameFinishDialog.show();
+                            mineSweeper.endGame();
                         }
                         smile.normalizing();                    
 
