@@ -39,7 +39,7 @@ public class MainMenu extends Activity {
         setContentView(R.layout.mainmenu_layout);
         source = new UserDataSource(this);
         source.open();
-        User u = source.createUser("hello",3,"normal");
+
 
         createInitialDialog();
         createLevelDialog();

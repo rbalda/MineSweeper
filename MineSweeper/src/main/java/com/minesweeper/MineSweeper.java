@@ -38,6 +38,8 @@ import java.io.FileOutputStream;
 import java.util.HashMap;
 import java.util.Random;
 
+import javax.sql.DataSource;
+
 /**
  * Created by ReneAlexander on 04/11/13.
  */
@@ -73,6 +75,8 @@ public class MineSweeper extends Activity {
 
     public static final String TAG = "TratamientoXML";
 
+    private UserDataSource dataSource;
+
 
     //Method that initialize variables for the Game
     public void init() {
@@ -80,6 +84,9 @@ public class MineSweeper extends Activity {
         levels.put(Level.BEGINNER, new LevelData(16, 16, 10));
         levels.put(Level.INTERMEDIATE, new LevelData(16, 16, 40));
         levels.put(Level.EXPERT, new LevelData(16, 30, 99));
+
+        dataSource = new UserDataSource(this);
+        dataSource.open();
 
     }
 
@@ -133,7 +140,9 @@ public class MineSweeper extends Activity {
         gameFinishDialog.findViewById(R.id.accept).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveXml("Jimmy",currentLevel,counter.getCount());
+                //saveXml("Jimmy",currentLevel,counter.getCount());
+                String s = ((EditText)gameFinishDialog.findViewById(R.id.nameText)).getText().toString();
+                User u = dataSource.createUser(s,clock.getCount(),currentLevel);
                 restartGame();
                 gameFinishDialog.dismiss();
                 //readXml();
