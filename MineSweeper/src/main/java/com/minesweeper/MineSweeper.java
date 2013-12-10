@@ -48,7 +48,7 @@ public class MineSweeper extends Activity {
     private boolean isPressed = false;
     private HashMap<Level, LevelData> levels;
     private boolean isStarted = false;
-    private boolean isOver = false;
+    private boolean isOver = true;
     private boolean isMined= false;
     private Shield shields[];
     private ImageView shieldsUI[];
@@ -130,7 +130,9 @@ public class MineSweeper extends Activity {
             @Override
             public void onClick(View v) {
                 saveXml("Jimmy",currentLevel,counter.getCount());
-                readXml();
+                restartGame();
+                gameFinishDialog.dismiss();
+                //readXml();
             }
         });
 
@@ -289,6 +291,9 @@ public class MineSweeper extends Activity {
     }
 
     public void startGame() {
+        if(!isOver)
+            return;
+        isOver=false;
         isStarted=true;
         createGamePanel();
         showGamePanel();
@@ -300,13 +305,21 @@ public class MineSweeper extends Activity {
         isStarted=false;
         isOver=true;
 
-        for (int row = 0; row < nOrInGamePanel; row++) {
-            for (int column = 0; column < nOcInGamePanel; column++) {
-                if(blocks[row][column].getValue()==-1){
-                    blocks[row][column].setPressed(true);
+        if(!hasWon()){
+            for (int row = 0; row < nOrInGamePanel; row++) {
+                for (int column = 0; column < nOcInGamePanel; column++) {
+                    if(blocks[row][column].getValue()==-1){
+                        blocks[row][column].setPressed(true);
+                    }
                 }
             }
         }
+    }
+
+    public void restartGame(){
+        clock.restart();
+        gamePanel.removeAllViews();
+        isMined=false;
     }
 
     private void createGamePanel() {
@@ -319,8 +332,7 @@ public class MineSweeper extends Activity {
                 blocks[row][column].setSmile(btnSmile);
                 //blocks[row][column].setDefaults();
 
-                final int cRow = row;
-                final int cColumn = column;
+
 
               /*  blocks[row][column].setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -522,5 +534,7 @@ public class MineSweeper extends Activity {
         else
             return false;
     }
+
+
 
 }

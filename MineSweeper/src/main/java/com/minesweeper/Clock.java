@@ -61,6 +61,11 @@ public class Clock implements Runnable {
         return count;
     }
 
+    public void restart(){
+        count=0;
+        text.setText("00" + Integer.toString(count));
+    }
+
     public String toString() {
         return Integer.toString(count);
     }
