@@ -18,6 +18,9 @@ import android.view.Window;
 
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -30,8 +33,10 @@ public class MainMenu extends Activity {
     private Typeface font;
     private Dialog startDialog;
     private Dialog levelDialog;
+    private Dialog scoreDialog;
     private UserDataSource source;
-
+    private ListView scoreList;
+    private BaseAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +45,7 @@ public class MainMenu extends Activity {
         source = new UserDataSource(this);
         source.open();
 
-
+        createScoreDialog();
         createInitialDialog();
         createLevelDialog();
 
@@ -74,6 +79,25 @@ public class MainMenu extends Activity {
         setInitialButtonAction();
     }
 
+    public void createScoreDialog(){
+        scoreDialog = new Dialog(MainMenu.this,R.style.Menu);
+        scoreDialog.setTitle(getResources().getString(R.string.title_level_menu));
+        scoreDialog.setContentView(R.layout.scoredialog);
+        scoreList=(ListView) scoreDialog.findViewById(R.id.scoreView);
+
+        ArrayAdapter<User> adapter=new ArrayAdapter<User>(this,android.R.layout.simple_list_item_1,android.R.id.text1,source.getAllUsers());
+        scoreList.setAdapter(adapter);
+
+        scoreDialog.findViewById(R.id.accept).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                scoreDialog.dismiss();
+                startDialog.show();
+            }
+        });
+
+    }
+
     public void setInitialButtonAction(){
         startDialog.findViewById(R.id.exit).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,6 +110,13 @@ public class MainMenu extends Activity {
             public void onClick(View v) {
                 startDialog.dismiss();
                 levelDialog.show();
+            }
+        });
+        startDialog.findViewById(R.id.high_scores).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startDialog.dismiss();
+                scoreDialog.show();
             }
         });
     }

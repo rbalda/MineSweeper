@@ -145,6 +145,7 @@ public class MineSweeper extends Activity {
                 User u = dataSource.createUser(s,clock.getCount(),currentLevel);
                 restartGame();
                 gameFinishDialog.dismiss();
+
                 //readXml();
             }
         });
