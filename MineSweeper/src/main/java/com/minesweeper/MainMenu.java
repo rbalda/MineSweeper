@@ -50,8 +50,7 @@ public class MainMenu extends Activity {
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         startDialog.show();
-        AnimationDrawable a = (AnimationDrawable)(findViewById(R.id.local_layout)).getBackground();
-        a.start();
+
     }
 
     public void createLevelDialog(){
