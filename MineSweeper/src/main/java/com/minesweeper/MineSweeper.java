@@ -54,6 +54,7 @@ public class MineSweeper extends Activity {
     private ImageView shieldsUI[];
     public Counter counter;
     private Intent intent;
+    private ViewGroup.LayoutParams locationOfShields;
 
 
     private AnimationDrawable animationDrawable;
@@ -289,17 +290,32 @@ public class MineSweeper extends Activity {
         counter.setCount(totalNumberOfMines);
         ImageView temp= (ImageView)findViewById(R.id.flag);
         main.removeView(temp);
+        locationOfShields = temp.getLayoutParams();
         shields = new Shield[totalNumberOfMines];
         shieldsUI = new ImageView[totalNumberOfMines];
         //(ImageView)findViewById(R.id.flag).get;
         for(int i=0;i<totalNumberOfMines;i++){
             shieldsUI[i]=new ImageView(this);
             shieldsUI[i].setBackground(temp.getBackground());
-            shieldsUI[i].setLayoutParams(temp.getLayoutParams());
+            shieldsUI[i].setLayoutParams(locationOfShields);
             shieldsUI[i].setScaleX((float) .45);
             shieldsUI[i].setScaleY((float) .45);
             main.addView(shieldsUI[i]);
             shields[i] = new Shield(shieldsUI[i]);
+        }
+    }
+
+    public void restartShields(){
+        counter.setCount(totalNumberOfMines);
+        RelativeLayout main = (RelativeLayout)findViewById(R.id.relative_layout);
+        for(int i=0;i<totalNumberOfMines;i++){
+            ViewGroup parent = (ViewGroup)shieldsUI[i].getParent();
+            parent.removeView(shieldsUI[i]);
+            shieldsUI[i].setScaleX((float) .45);
+            shieldsUI[i].setScaleY((float) .45);
+            shieldsUI[i].setLayoutParams(locationOfShields);
+            main.addView(shieldsUI[i]);
+
         }
     }
 
@@ -345,6 +361,7 @@ public class MineSweeper extends Activity {
         clock.restart();
         gamePanel.removeAllViews();
         isMined=false;
+        restartShields();
     }
 
     private void createGamePanel() {
