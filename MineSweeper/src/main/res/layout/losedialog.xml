@@ -15,20 +15,8 @@
         android:layout_gravity="center_horizontal"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textSize="25sp"
-        android:text="Congratulations You Won"
+        android:text="Sorry You lost"
         android:id="@+id/textView" />
-
-    <EditText
-        android:id="@+id/nameText"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:ems="10"
-        android:hint="enter your name"
-        android:singleLine="true">
-
-        <requestFocus />
-    </EditText>
 
     <Button
         android:layout_margin="15dp"
