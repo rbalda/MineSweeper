@@ -6,7 +6,14 @@
     android:id="@+id/local_layout"
     android:background="@drawable/backmenu"
     >
-
-
-
+    <ImageView
+        android:gravity="center_horizontal"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:background="@drawable/minesweeper_title"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"/>
 </RelativeLayout>
