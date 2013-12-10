@@ -71,15 +71,16 @@ public class BlockUI extends FrameLayout {
                         break;
                     case MotionEvent.ACTION_UP:
                         if(getValue()>-1)
-                        mineSweeper.explore(f);
+                            mineSweeper.explore(f);
                         else{
-                        setPressed(true);
-                        mineSweeper.endGame();
+                            setPressed(true);
+                            mineSweeper.endGame();
                             vb.vibrate(500);
+                            mineSweeper.gameLostDialog.show();
                         }
                         if(mineSweeper.hasWon()){
-                            mineSweeper.gameFinishDialog.show();
                             mineSweeper.endGame();
+                            mineSweeper.gameFinishDialog.show();
                         }
                         smile.normalizing();                    
 

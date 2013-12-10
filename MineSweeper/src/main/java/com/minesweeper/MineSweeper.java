@@ -67,7 +67,9 @@ public class MineSweeper extends Activity {
     private int nOcInGamePanel;
     private int totalNumberOfMines;
     private String currentLevel;
+    public Dialog gameLostDialog;
     public Dialog gameFinishDialog;
+
     public static final String TAG = "TratamientoXML";
 
 
@@ -98,7 +100,8 @@ public class MineSweeper extends Activity {
 
         //shield = new Shield((ImageView) findViewById(R.id.flag));
         initShields();
-        createLevelDialog();
+        createWonDialog();
+        createLoseDialog();
 
         //animationDrawable = (AnimationDrawable) shield.getS().getBackground();
         clock = new Clock(t);
@@ -122,7 +125,7 @@ public class MineSweeper extends Activity {
 
     }
 
-    public void createLevelDialog(){
+    public void createWonDialog(){
         gameFinishDialog = new Dialog(MineSweeper.this,R.style.Menu);
         gameFinishDialog.setTitle(getResources().getString(R.string.title_level_menu));
         gameFinishDialog.setContentView(R.layout.finishdialog);
@@ -143,6 +146,28 @@ public class MineSweeper extends Activity {
         gameFinishDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         //setLevelButtonAction();
     }
+
+    public void createLoseDialog(){
+        gameLostDialog = new Dialog(MineSweeper.this,R.style.Menu);
+        gameLostDialog.setTitle(getResources().getString(R.string.title_level_menu));
+        gameLostDialog.setContentView(R.layout.losedialog);
+        gameLostDialog.findViewById(R.id.accept).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                restartGame();
+                gameLostDialog.dismiss();
+                //readXml();
+            }
+        });
+
+        WindowManager.LayoutParams lp = gameFinishDialog.getWindow().getAttributes();
+        lp.dimAmount=0.5f;
+        lp.screenBrightness = 1.0F;
+        gameLostDialog.getWindow().setAttributes(lp);
+        gameLostDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        //setLevelButtonAction();
+    }
+
 
     private void saveXml(String name, String level, int time){
         FileOutputStream fileOut =null;
