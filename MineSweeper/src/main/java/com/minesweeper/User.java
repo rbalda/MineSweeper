@@ -37,6 +37,11 @@ public class User {
         return initials;
     }
 
+    @Override
+    public String toString() {
+        return initials +"\t"+ time;
+    }
+
     public void setInitials(String initials) {
         this.initials = initials;
     }
