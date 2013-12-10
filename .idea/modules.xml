@@ -4,6 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/MineSweeper/MineSweeper.iml" filepath="$PROJECT_DIR$/MineSweeper/MineSweeper.iml" />
       <module fileurl="file://$PROJECT_DIR$/MineSweeper/MineSweeper-MineSweeper.iml" filepath="$PROJECT_DIR$/MineSweeper/MineSweeper-MineSweeper.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MineSweeper/MineSweeper-MineSweeper.iml" filepath="$PROJECT_DIR$/MineSweeper/MineSweeper-MineSweeper.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MineSweeper/MineSweeper-MineSweeper.iml" filepath="$PROJECT_DIR$/MineSweeper/MineSweeper-MineSweeper.iml" />
       <module fileurl="file://$PROJECT_DIR$/MineSweeperProject.iml" filepath="$PROJECT_DIR$/MineSweeperProject.iml" />
     </modules>
   </component>
