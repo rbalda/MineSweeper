@@ -26,7 +26,7 @@ public class ItemListAdapter extends BaseAdapter {
 
 
     public Object getItem(int i) {
-        return listUser.get(i);
+        return listUser.get(i).toString();
     }
 
 
