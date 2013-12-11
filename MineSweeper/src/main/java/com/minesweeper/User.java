@@ -3,7 +3,7 @@ package com.minesweeper;
 /**
  * Created by ReneAlexander on 07/12/13.
  */
-public class User {
+public class User implements Comparable<User>{
     private int id;
     private int time;
     private String initials;
@@ -39,10 +39,18 @@ public class User {
 
     @Override
     public String toString() {
-        return initials +"\t"+ time;
+        return initials +"\t\t\t"+ time;
     }
 
     public void setInitials(String initials) {
         this.initials = initials;
+    }
+
+    @Override
+    public int compareTo(User another) {
+        if(time<another.time)
+            return -1;
+        else
+            return 1;
     }
 }
