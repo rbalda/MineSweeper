@@ -55,11 +55,13 @@ public class MainMenu extends Activity {
         source = new UserDataSource(this);
         source.open();
         init();
-        loadLevels(source.getAllUsers());
+
         createScoreDialog();
         createInitialDialog();
         createLevelDialog();
-        
+        startDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation;
+        levelDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation;
+        scoreDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation;
 
     }
 
@@ -71,6 +73,7 @@ public class MainMenu extends Activity {
         findViewById(R.id.title).setScaleY((float)1.2);
         Animation anim= AnimationUtils.loadAnimation(this,R.anim.title_animation);
         findViewById(R.id.title).startAnimation(anim);
+        loadLevels(source.getAllUsers());
 
     }
     
@@ -210,7 +213,9 @@ public class MainMenu extends Activity {
     }
 
     public void loadLevels(List<User> l){
-        
+        normal.removeAll(normal);
+        experts.removeAll(experts);
+        easy.removeAll(easy);
 
         for(User u: l){
             if(u.getLevel().equals("Normal"))

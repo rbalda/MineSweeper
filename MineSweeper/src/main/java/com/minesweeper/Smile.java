@@ -1,5 +1,6 @@
 package com.minesweeper;
 
+import android.graphics.drawable.Drawable;
 import android.widget.ImageButton;
 
 /**
@@ -18,6 +19,11 @@ public class Smile {
 
     public void normalizing() {
         button.setPressed(false);
+        button.setEnabled(true);
+    }
+
+    public void killed(){
+       // button.setBackground();
     }
 
     public ImageButton getButton() {

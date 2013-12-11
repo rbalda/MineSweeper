@@ -76,6 +76,7 @@ public class BlockUI extends FrameLayout {
                             setPressed(true);
                             mineSweeper.endGame();
                             vb.vibrate(500);
+                            smile.killed();
                             mineSweeper.gameLostDialog.show();
                         }
                         if(mineSweeper.hasWon()){
