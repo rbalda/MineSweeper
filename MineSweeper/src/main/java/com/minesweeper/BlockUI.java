@@ -79,8 +79,12 @@ public class BlockUI extends FrameLayout {
                             mineSweeper.gameLostDialog.show();
                         }
                         if(mineSweeper.hasWon()){
+                            mineSweeper.getClock().stop();
+                            mineSweeper.setStarted(false);
+                            mineSweeper.setOver(true);
+                            //mineSweeper.endGame();
                             mineSweeper.gameFinishDialog.show();
-                            mineSweeper.endGame();
+
                         }
                         smile.normalizing();                    
 
@@ -110,8 +114,8 @@ public class BlockUI extends FrameLayout {
                         View view = (View) event.getLocalState();
                         ViewGroup owner = (ViewGroup) view.getParent();
 
-                        //view.setScaleX((float) .5);
-                        //view.setScaleY((float) .5);
+                        view.setScaleX((float) .75);
+                        view.setScaleY((float) .75);
 
 
                         if (!isPressed()) {
