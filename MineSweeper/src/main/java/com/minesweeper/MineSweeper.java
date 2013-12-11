@@ -63,6 +63,7 @@ public class MineSweeper extends Activity {
     private AnimationDrawable animationDrawable;
     private MediaPlayer clickSound;
     private MediaPlayer mineSound;
+    private MediaPlayer backgroundSound;
     private int posActual=0;
 
     private BlockUI blocks[][]; // blocks for mine field
@@ -122,9 +123,9 @@ public class MineSweeper extends Activity {
         clickSound=new MediaPlayer();
         clickSound=MediaPlayer.create(getApplicationContext(), R.raw.dig);
 
-
         mineSound=new MediaPlayer();
         mineSound=MediaPlayer.create(getApplicationContext(), R.raw.mine);
+
 
 
         btnSmile = new Smile((ImageButton) findViewById(R.id.Smile));
@@ -168,6 +169,7 @@ public class MineSweeper extends Activity {
                 User u = dataSource.createUser(s,clock.getCount(),currentLevel);
                 gameFinishDialog.dismiss();
                 dataSource.close();
+                backgroundSound.stop();
                 finish();
 
                 //readXml();
@@ -192,6 +194,8 @@ public class MineSweeper extends Activity {
         mineSound.start();
     }
 
+
+
     public void createLoseDialog(){
         gameLostDialog = new Dialog(MineSweeper.this,R.style.Menu);
         gameLostDialog.setContentView(R.layout.losedialog);
@@ -209,6 +213,7 @@ public class MineSweeper extends Activity {
             public void onClick(View v) {
 
                 gameLostDialog.dismiss();
+
                 finish();
             }
         });

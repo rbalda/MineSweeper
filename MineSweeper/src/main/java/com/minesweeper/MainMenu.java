@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 
 
@@ -49,6 +50,7 @@ public class MainMenu extends Activity {
     private ArrayList<User> experts;
     private ArrayList<User> normal;
     private ArrayList<User> easy;
+    private PermanentAudio backgroundSound;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,9 @@ public class MainMenu extends Activity {
         source = new UserDataSource(this);
         source.open();
         init();
+
+        backgroundSound= getPermanentAudio(R.raw.indiana);
+        backgroundSound.play();
 
         createScoreDialog();
         createInitialDialog();
@@ -71,6 +76,8 @@ public class MainMenu extends Activity {
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
+
+
         startDialog.show();
         findViewById(R.id.title).setScaleX((float)1.2);
         findViewById(R.id.title).setScaleY((float)1.2);
@@ -84,6 +91,11 @@ public class MainMenu extends Activity {
         experts = new ArrayList<User>();
         normal = new ArrayList<User>();
         easy = new ArrayList<User>();
+    }
+
+    private PermanentAudio getPermanentAudio(int id) {
+
+        return new PermanentAudio(getBaseContext(),id);
     }
 
     public void createLevelDialog(){
@@ -167,6 +179,7 @@ public class MainMenu extends Activity {
             public void onClick(View v) {
                 Intent int1 = new Intent(MainMenu.this,MineSweeper.class);
                 int1.putExtra("level",1);
+
                 startActivity(int1);
                 levelDialog.dismiss();
 
@@ -177,6 +190,7 @@ public class MainMenu extends Activity {
             public void onClick(View v) {
                 Intent int1 = new Intent(MainMenu.this,MineSweeper.class);
                 int1.putExtra("level",2);
+
                 startActivity(int1);
                 levelDialog.dismiss();
             }
@@ -186,6 +200,7 @@ public class MainMenu extends Activity {
             public void onClick(View v) {
                 Intent int1 = new Intent(MainMenu.this,MineSweeper.class);
                 int1.putExtra("level",3);
+
                 startActivity(int1);
                 levelDialog.dismiss();
             }
