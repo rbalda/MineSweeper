@@ -61,7 +61,9 @@ public class MineSweeper extends Activity {
 
 
     private AnimationDrawable animationDrawable;
-
+    private MediaPlayer clickSound;
+    private MediaPlayer mineSound;
+    private int posActual=0;
 
     private BlockUI blocks[][]; // blocks for mine field
     private int blockDimension = 60; // width of each block
@@ -117,6 +119,12 @@ public class MineSweeper extends Activity {
 
         gamePanel = (TableLayout) findViewById(R.id.game_panel);
 
+        clickSound=new MediaPlayer();
+        clickSound=MediaPlayer.create(getApplicationContext(), R.raw.dig);
+
+
+        mineSound=new MediaPlayer();
+        mineSound=MediaPlayer.create(getApplicationContext(), R.raw.mine);
 
 
         btnSmile = new Smile((ImageButton) findViewById(R.id.Smile));
@@ -172,6 +180,16 @@ public class MineSweeper extends Activity {
         gameFinishDialog.getWindow().setAttributes(lp);
         gameFinishDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         //setLevelButtonAction();
+    }
+
+    public void playClick(){
+        clickSound.seekTo(posActual);
+        clickSound.start();
+    }
+
+    public void playMine(){
+        mineSound.seekTo(posActual);
+        mineSound.start();
     }
 
     public void createLoseDialog(){

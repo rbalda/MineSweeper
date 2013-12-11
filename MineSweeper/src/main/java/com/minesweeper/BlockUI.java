@@ -41,9 +41,7 @@ public class BlockUI extends FrameLayout {
     private final int colours[]= {Color.MAGENTA,Color.CYAN, Color.YELLOW,Color.WHITE,Color.GREEN,Color.RED,Color.LTGRAY,Color.MAGENTA};
     private boolean isShielded = false;
     private Vibrator vb;
-    private MediaPlayer clickSound;
-    private MediaPlayer mineSound;
-    private int posActual=0;
+
 
     public BlockUI(Context context, int r, int c, MineSweeper m) {
         super(context);
@@ -59,13 +57,7 @@ public class BlockUI extends FrameLayout {
         block = new Block(r, c);
         mineSweeper = m;
 
-        clickSound=new MediaPlayer();
-        clickSound=MediaPlayer.create(m.getApplicationContext(), R.raw.dig);
-        clickSound.seekTo(posActual);
 
-        mineSound=new MediaPlayer();
-        mineSound=MediaPlayer.create(m.getApplicationContext(), R.raw.mine);
-        mineSound.seekTo(posActual);
 
         setOnTouchListener(new OnTouchListener() {
             @Override
@@ -83,13 +75,11 @@ public class BlockUI extends FrameLayout {
                         break;
                     case MotionEvent.ACTION_UP:
                         if(getValue()>-1){
-                            clickSound.seekTo(posActual);
-                            clickSound.start();
+                            mineSweeper.playClick();
                             mineSweeper.explore(f);
                         }
                         else{
-                            mineSound.seekTo(posActual);
-                            mineSound.start();
+                            mineSweeper.playMine();
                             setPressed(true);
                             mineSweeper.endGame();
                             vb.vibrate(500);
