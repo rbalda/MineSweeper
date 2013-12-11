@@ -23,7 +23,11 @@ public class Smile {
     }
 
     public void killed(){
-       // button.setBackground();
+        button.setBackgroundResource(R.drawable.dead_smile);
+    }
+
+    public void cooled(){
+        button.setBackgroundResource(R.drawable.cool_smile);
     }
 
     public ImageButton getButton() {

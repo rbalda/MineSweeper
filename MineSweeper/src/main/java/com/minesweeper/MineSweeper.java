@@ -413,7 +413,7 @@ public class MineSweeper extends Activity {
     }
 
     public void restartGame(){
-
+        btnSmile.getButton().setBackgroundResource(R.drawable.smile_states);
         clock.restart();
         gamePanel.removeAllViews();
         isMined=false;

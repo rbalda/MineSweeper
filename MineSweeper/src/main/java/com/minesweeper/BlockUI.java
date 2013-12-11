@@ -87,6 +87,7 @@ public class BlockUI extends FrameLayout {
                             mineSweeper.gameLostDialog.show();
                         }
                         if(mineSweeper.hasWon()){
+
                             mineSweeper.getClock().stop();
                             mineSweeper.setStarted(false);
                             mineSweeper.setOver(true);

@@ -16,6 +16,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
@@ -39,6 +40,7 @@ public class MainMenu extends Activity {
     private Dialog startDialog;
     private Dialog levelDialog;
     private Dialog scoreDialog;
+    private Dialog aboutDialog;
     private UserDataSource source;
     private ListView scoreListEasy;
     private ListView scoreListNormal;
@@ -59,6 +61,7 @@ public class MainMenu extends Activity {
         createScoreDialog();
         createInitialDialog();
         createLevelDialog();
+        createAboutDialog();
         startDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation;
         levelDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation;
         scoreDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation;
@@ -135,6 +138,13 @@ public class MainMenu extends Activity {
                 MainMenu.this.finish();
             }
         });
+        startDialog.findViewById(R.id.about).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startDialog.dismiss();
+                aboutDialog.show();
+            }
+        });
         startDialog.findViewById(R.id.start_game).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -158,6 +168,7 @@ public class MainMenu extends Activity {
                 Intent int1 = new Intent(MainMenu.this,MineSweeper.class);
                 int1.putExtra("level",1);
                 startActivity(int1);
+                levelDialog.dismiss();
 
             }
         });
@@ -167,6 +178,7 @@ public class MainMenu extends Activity {
                 Intent int1 = new Intent(MainMenu.this,MineSweeper.class);
                 int1.putExtra("level",2);
                 startActivity(int1);
+                levelDialog.dismiss();
             }
         });
         levelDialog.findViewById(R.id.expert).setOnClickListener(new View.OnClickListener() {
@@ -175,6 +187,7 @@ public class MainMenu extends Activity {
                 Intent int1 = new Intent(MainMenu.this,MineSweeper.class);
                 int1.putExtra("level",3);
                 startActivity(int1);
+                levelDialog.dismiss();
             }
         });
         levelDialog.findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
@@ -196,18 +209,7 @@ public class MainMenu extends Activity {
         TextView text=t;
         font = Typeface.createFromAsset(getAssets(),"fonts/ARMY RUST.ttf");
         text.setTypeface(font);
-        //text.setOnTouchListener(new View.OnTouchListener() {
-            //@Override
-            //public boolean onTouch(View v, MotionEvent event) {
-            //    if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            //       Animation anim = AnimationUtils.loadAnimation(MainMenu.this, R.anim.button_animation);
-            //        v.startAnimation(anim);
 
-            //    }
-            //   return true;
-
-            //}
-        //});
 
 
     }
@@ -240,7 +242,30 @@ public class MainMenu extends Activity {
         v.setAdapter(adapter);
 
     }
-    
+
+
+    public void createAboutDialog(){
+        aboutDialog = new Dialog(MainMenu.this,R.style.Menu);
+        aboutDialog.setContentView(R.layout.about_layout);
+        loadFont((TextView)aboutDialog.findViewById(R.id.Title));
+        loadFont((TextView)aboutDialog.findViewById(R.id.content));
+        loadFont((TextView)aboutDialog.findViewById(R.id.jimmy));
+        loadFont((TextView)aboutDialog.findViewById(R.id.rene));
+        aboutDialog.findViewById(R.id.accept).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                aboutDialog.dismiss();
+                startDialog.show();
+            }
+        });
+
+        WindowManager.LayoutParams lp = aboutDialog.getWindow().getAttributes();
+        lp.dimAmount=0.5f;
+        lp.screenBrightness = 1.0F;
+        aboutDialog.getWindow().setAttributes(lp);
+        aboutDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+
+    }
     
 
 

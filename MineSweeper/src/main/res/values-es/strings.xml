@@ -13,5 +13,9 @@
     <string name="ok">Ok</string>
     <string name="you_lose">Perdiste</string>
     <string name="you_win">Ganaste</string>
+    <string name="title_about">Acerca</string>
+    <string name="content_about">Este juego es desarrollado por: </string>
+    <string name="rene">Rene Balda Tarira</string>
+    <string name="jimmy">Jimmy Banchon Zambrano</string>
 
 </resources>
