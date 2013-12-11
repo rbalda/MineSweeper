@@ -82,8 +82,8 @@ public class MineSweeper extends Activity {
     public void init() {
         levels = new HashMap<Level, LevelData>();
         levels.put(Level.BEGINNER, new LevelData(16, 16, 10));
-        levels.put(Level.INTERMEDIATE, new LevelData(16, 16, 40));
-        levels.put(Level.EXPERT, new LevelData(16, 30, 99));
+        levels.put(Level.INTERMEDIATE, new LevelData(16, 16, 10));
+        levels.put(Level.EXPERT, new LevelData(16, 30, 10));
 
         dataSource = new UserDataSource(this);
         dataSource.open();
@@ -308,8 +308,8 @@ public class MineSweeper extends Activity {
             shieldsUI[i]=new ImageView(this);
             shieldsUI[i].setBackground(temp.getBackground());
             shieldsUI[i].setLayoutParams(locationOfShields);
-            shieldsUI[i].setScaleX((float) .45);
-            shieldsUI[i].setScaleY((float) .45);
+            //shieldsUI[i].setScaleX((float) .75);
+           // shieldsUI[i].setScaleY((float) .75);
             main.addView(shieldsUI[i]);
             shields[i] = new Shield(shieldsUI[i]);
         }
@@ -321,8 +321,8 @@ public class MineSweeper extends Activity {
         for(int i=0;i<totalNumberOfMines;i++){
             ViewGroup parent = (ViewGroup)shieldsUI[i].getParent();
             parent.removeView(shieldsUI[i]);
-            shieldsUI[i].setScaleX((float) .45);
-            shieldsUI[i].setScaleY((float) .45);
+            shieldsUI[i].setScaleX((float) .9);
+            shieldsUI[i].setScaleY((float) .9);
             shieldsUI[i].setLayoutParams(locationOfShields);
             main.addView(shieldsUI[i]);
 
@@ -365,13 +365,18 @@ public class MineSweeper extends Activity {
                 }
             }
         }
+
+
+        return;
     }
 
     public void restartGame(){
+
         clock.restart();
         gamePanel.removeAllViews();
         isMined=false;
         restartShields();
+        return;
     }
 
     private void createGamePanel() {
@@ -565,9 +570,10 @@ public class MineSweeper extends Activity {
     }
 
     public boolean hasWon(){
-        /*if(counter.getCount()>0)
+
+        if(counter.getCount()>0)
             return false;
-        */
+
         int totalMinesMarked=0;
         int totalBlocksPressed=0;
 
@@ -581,6 +587,7 @@ public class MineSweeper extends Activity {
             }
         }
 
+
         if(totalMinesMarked==totalNumberOfMines && totalBlocksPressed==((nOcInGamePanel*nOrInGamePanel)-totalNumberOfMines))
             return true;
         else
@@ -588,5 +595,7 @@ public class MineSweeper extends Activity {
     }
 
 
-
+    public Clock getClock() {
+        return clock;
+    }
 }
