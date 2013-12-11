@@ -52,6 +52,7 @@ public class MainMenu extends Activity {
     private ArrayList<User> easy;
     private PermanentAudio backgroundSound;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +60,7 @@ public class MainMenu extends Activity {
         source = new UserDataSource(this);
         source.open();
         init();
+        
 
         backgroundSound= getPermanentAudio(R.raw.indiana);
         backgroundSound.play();
@@ -266,6 +268,8 @@ public class MainMenu extends Activity {
         loadFont((TextView)aboutDialog.findViewById(R.id.content));
         loadFont((TextView)aboutDialog.findViewById(R.id.jimmy));
         loadFont((TextView)aboutDialog.findViewById(R.id.rene));
+        loadFont((TextView)aboutDialog.findViewById(R.id.accept));
+
         aboutDialog.findViewById(R.id.accept).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -281,7 +285,11 @@ public class MainMenu extends Activity {
         aboutDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
 
     }
-    
 
+    @Override
+    public void finish() {
+        backgroundSound.stop();
+        super.finish();
 
+    }
 }
