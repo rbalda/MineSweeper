@@ -21,8 +21,8 @@ public class Shield {
 
     public Shield(ImageView shield) {
         this.s = shield;
-        s.setScaleX((float) .5);
-        s.setScaleY((float) .5);
+        s.setScaleX((float) .9);
+        s.setScaleY((float) .9);
         s.setBackgroundResource(R.drawable.shield);
         s.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -32,8 +32,8 @@ public class Shield {
                     case MotionEvent.ACTION_DOWN:
                         //oldX = (int) getS().getX();
                         //oldY = (int) getS().getY();
-                        getS().setScaleX((float) 0.45);
-                        getS().setScaleY((float) 0.45);
+                        //getS().setScaleX((float) 0.45);
+                        //getS().setScaleY((float) 0.45);
                         View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
                         v.startDrag(null, shadowBuilder, v, 0);
                         break;
