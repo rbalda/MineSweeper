@@ -232,7 +232,7 @@ public class BlockUI extends FrameLayout {
             x = (int)(imgWidth/5);
 
 
-            Bitmap b = BitmapFactory.decodeResource(this.getResources(),R.drawable.minesweeperlogo);
+            Bitmap b = BitmapFactory.decodeResource(this.getResources(),R.drawable.mines);
             b = b.createScaledBitmap(b,25,25,false);
 
             if(isPressed())
