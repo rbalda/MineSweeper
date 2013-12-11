@@ -9,6 +9,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.os.Vibrator;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -40,7 +41,9 @@ public class BlockUI extends FrameLayout {
     private final int colours[]= {Color.MAGENTA,Color.CYAN, Color.YELLOW,Color.WHITE,Color.GREEN,Color.RED,Color.LTGRAY,Color.MAGENTA};
     private boolean isShielded = false;
     private Vibrator vb;
-
+    private MediaPlayer clickSound;
+    private MediaPlayer mineSound;
+    private int posActual=0;
 
     public BlockUI(Context context, int r, int c, MineSweeper m) {
         super(context);
@@ -50,11 +53,19 @@ public class BlockUI extends FrameLayout {
         vb = (Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE);
 
 
+
         //setLayoutParams(new LayoutParams(dimension,dimension));
         //setPadding(-10, -10, -10, -10);
         block = new Block(r, c);
         mineSweeper = m;
 
+        clickSound=new MediaPlayer();
+        clickSound=MediaPlayer.create(m.getApplicationContext(), R.raw.dig);
+        clickSound.seekTo(posActual);
+
+        mineSound=new MediaPlayer();
+        mineSound=MediaPlayer.create(m.getApplicationContext(), R.raw.mine);
+        mineSound.seekTo(posActual);
 
         setOnTouchListener(new OnTouchListener() {
             @Override
@@ -63,6 +74,7 @@ public class BlockUI extends FrameLayout {
                 BlockUI f = (BlockUI)v;
                 switch (e) {
                     case MotionEvent.ACTION_DOWN:
+
                         smile.surprising();
                         if (!mineSweeper.isMined()) {
                              mineSweeper.setMinesOnGamePanel(getBlock().getRow(), getBlock().getColumn());
@@ -70,9 +82,14 @@ public class BlockUI extends FrameLayout {
 
                         break;
                     case MotionEvent.ACTION_UP:
-                        if(getValue()>-1)
+                        if(getValue()>-1){
+                            clickSound.seekTo(posActual);
+                            clickSound.start();
                             mineSweeper.explore(f);
+                        }
                         else{
+                            mineSound.seekTo(posActual);
+                            mineSound.start();
                             setPressed(true);
                             mineSweeper.endGame();
                             vb.vibrate(500);
@@ -104,7 +121,7 @@ public class BlockUI extends FrameLayout {
                     case DragEvent.ACTION_DRAG_STARTED:
                         View viewTemp = (View) event.getLocalState();
                         ViewGroup ownerTemp = (ViewGroup) viewTemp.getParent();
-                        
+
 
                         if (ownerTemp instanceof BlockUI)
                             ((BlockUI) ownerTemp).isShielded = false;
@@ -122,17 +139,16 @@ public class BlockUI extends FrameLayout {
                         if (!isPressed()) {
                             owner.removeView(view);
                             addView(view);
-                            if(owner instanceof RelativeLayout)
-                            mineSweeper.counter.decrement();
-                        }
-                        else{
+                            if (owner instanceof RelativeLayout)
+                                mineSweeper.counter.decrement();
+                        } else {
 
-                            if(!(owner instanceof RelativeLayout) )
-                            owner.addView(view);
+                            if (!(owner instanceof RelativeLayout))
+                                owner.addView(view);
 
                         }
-                        isShielded=true;
-                        if(mineSweeper.hasWon())
+                        isShielded = true;
+                        if (mineSweeper.hasWon())
                             mineSweeper.gameFinishDialog.show();
                         break;
                 }

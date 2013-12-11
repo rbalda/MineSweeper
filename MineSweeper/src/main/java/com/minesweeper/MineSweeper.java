@@ -7,6 +7,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
@@ -81,7 +82,7 @@ public class MineSweeper extends Activity {
     //Method that initialize variables for the Game
     public void init() {
         levels = new HashMap<Level, LevelData>();
-        levels.put(Level.BEGINNER, new LevelData(9, 9, 10));
+        levels.put(Level.BEGINNER, new LevelData(16, 16, 10));
         levels.put(Level.INTERMEDIATE, new LevelData(16, 16, 10));
         levels.put(Level.EXPERT, new LevelData(16, 30, 10));
 
@@ -115,6 +116,7 @@ public class MineSweeper extends Activity {
         clock = new Clock(t);
 
         gamePanel = (TableLayout) findViewById(R.id.game_panel);
+
 
 
         btnSmile = new Smile((ImageButton) findViewById(R.id.Smile));
