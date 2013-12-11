@@ -24,6 +24,11 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
 
 /**
  * Created by ReneAlexander on 07/12/13.
@@ -35,8 +40,13 @@ public class MainMenu extends Activity {
     private Dialog levelDialog;
     private Dialog scoreDialog;
     private UserDataSource source;
-    private ListView scoreList;
+    private ListView scoreListEasy;
+    private ListView scoreListNormal;
+    private ListView scoreListExpert;
     private BaseAdapter adapter;
+    private ArrayList<User> experts;
+    private ArrayList<User> normal;
+    private ArrayList<User> easy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +54,12 @@ public class MainMenu extends Activity {
         setContentView(R.layout.mainmenu_layout);
         source = new UserDataSource(this);
         source.open();
-
+        init();
+        loadLevels(source.getAllUsers());
         createScoreDialog();
         createInitialDialog();
         createLevelDialog();
+        
 
     }
 
@@ -55,7 +67,17 @@ public class MainMenu extends Activity {
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         startDialog.show();
+        findViewById(R.id.title).setScaleX((float)1.2);
+        findViewById(R.id.title).setScaleY((float)1.2);
+        Animation anim= AnimationUtils.loadAnimation(this,R.anim.title_animation);
+        findViewById(R.id.title).startAnimation(anim);
 
+    }
+    
+    public void init(){
+        experts = new ArrayList<User>();
+        normal = new ArrayList<User>();
+        easy = new ArrayList<User>();
     }
 
     public void createLevelDialog(){
@@ -83,10 +105,15 @@ public class MainMenu extends Activity {
         scoreDialog = new Dialog(MainMenu.this,R.style.Menu);
         scoreDialog.setTitle(getResources().getString(R.string.title_level_menu));
         scoreDialog.setContentView(R.layout.scoredialog);
-        scoreList=(ListView) scoreDialog.findViewById(R.id.scoreView);
-
-        ArrayAdapter<User> adapter=new ArrayAdapter<User>(this,android.R.layout.simple_list_item_1,android.R.id.text1,source.getAllUsers());
-        scoreList.setAdapter(adapter);
+        scoreListEasy=(ListView) scoreDialog.findViewById(R.id.scoreViewEasy);
+        scoreListNormal=(ListView) scoreDialog.findViewById(R.id.scoreViewNormal);
+        scoreListExpert=(ListView) scoreDialog.findViewById(R.id.scoreViewExpert);
+        setListToListView(scoreListEasy,easy);
+        setListToListView(scoreListNormal,normal);
+        setListToListView(scoreListExpert,experts);
+        loadFont((TextView)scoreDialog.findViewById(R.id.cat_expert));
+        loadFont((TextView)scoreDialog.findViewById(R.id.cat_normal));
+        loadFont((TextView)scoreDialog.findViewById(R.id.cat_easy));
 
         scoreDialog.findViewById(R.id.accept).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -179,6 +206,35 @@ public class MainMenu extends Activity {
         });
 
     }
+
+    public void loadLevels(List<User> l){
+        
+
+        for(User u: l){
+            if(u.getLevel().equals("Normal"))
+                normal.add(u);
+            else if(u.getLevel().equals("Expert"))
+                experts.add(u);
+            else
+                easy.add(u);
+        }
+
+        Collections.sort(easy);
+        Collections.sort(normal);
+        Collections.sort(experts);
+
+
+
+    }
+
+    public void setListToListView(ListView v,List<User> list){
+
+        ArrayAdapter<User> adapter=new ArrayAdapter<User>(this,android.R.layout.simple_list_item_1,android.R.id.text1,list);
+        v.setAdapter(adapter);
+
+    }
+    
+    
 
 
 }
