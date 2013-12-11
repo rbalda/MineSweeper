@@ -193,17 +193,19 @@ public class MainMenu extends Activity {
         TextView text=t;
         font = Typeface.createFromAsset(getAssets(),"fonts/ARMY RUST.ttf");
         text.setTypeface(font);
-        text.setOnHoverListener(new View.OnHoverListener() {
-            @Override
-            public boolean onHover(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_HOVER_ENTER) {
-                    Animation anim = AnimationUtils.loadAnimation(MainMenu.this, R.anim.button_animation);
-                    v.startAnimation(anim);
+        //text.setOnTouchListener(new View.OnTouchListener() {
+            //@Override
+            //public boolean onTouch(View v, MotionEvent event) {
+            //    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            //       Animation anim = AnimationUtils.loadAnimation(MainMenu.this, R.anim.button_animation);
+            //        v.startAnimation(anim);
 
-                }
-                return true;
-            }
-        });
+            //    }
+            //   return true;
+
+            //}
+        //});
+
 
     }
 

@@ -81,7 +81,7 @@ public class MineSweeper extends Activity {
     //Method that initialize variables for the Game
     public void init() {
         levels = new HashMap<Level, LevelData>();
-        levels.put(Level.BEGINNER, new LevelData(16, 16, 10));
+        levels.put(Level.BEGINNER, new LevelData(9, 9, 10));
         levels.put(Level.INTERMEDIATE, new LevelData(16, 16, 10));
         levels.put(Level.EXPERT, new LevelData(16, 30, 10));
 
@@ -137,7 +137,8 @@ public class MineSweeper extends Activity {
         gameFinishDialog = new Dialog(MineSweeper.this,R.style.Menu);
         gameFinishDialog.setTitle(getResources().getString(R.string.title_level_menu));
         gameFinishDialog.setContentView(R.layout.finishdialog);
-        gameFinishDialog.findViewById(R.id.accept).setOnClickListener(new View.OnClickListener() {
+        loadFont((TextView)gameFinishDialog.findViewById(R.id.youWin));
+        gameFinishDialog.findViewById(R.id.restart).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //saveXml("Jimmy",currentLevel,counter.getCount());
@@ -145,6 +146,19 @@ public class MineSweeper extends Activity {
                 User u = dataSource.createUser(s,clock.getCount(),currentLevel);
                 restartGame();
                 gameFinishDialog.dismiss();
+
+                //readXml();
+            }
+        });
+        gameFinishDialog.findViewById(R.id.exit).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //saveXml("Jimmy",currentLevel,counter.getCount());
+                String s = ((EditText)gameFinishDialog.findViewById(R.id.nameText)).getText().toString();
+                User u = dataSource.createUser(s,clock.getCount(),currentLevel);
+                gameFinishDialog.dismiss();
+                dataSource.close();
+                finish();
 
                 //readXml();
             }
@@ -160,14 +174,22 @@ public class MineSweeper extends Activity {
 
     public void createLoseDialog(){
         gameLostDialog = new Dialog(MineSweeper.this,R.style.Menu);
-        gameLostDialog.setTitle(getResources().getString(R.string.title_level_menu));
         gameLostDialog.setContentView(R.layout.losedialog);
-        gameLostDialog.findViewById(R.id.accept).setOnClickListener(new View.OnClickListener() {
+        loadFont((TextView)gameLostDialog.findViewById(R.id.youLose));
+        gameLostDialog.findViewById(R.id.restart).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 restartGame();
                 gameLostDialog.dismiss();
                 //readXml();
+            }
+        });
+        gameLostDialog.findViewById(R.id.exit).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                gameLostDialog.dismiss();
+                finish();
             }
         });
 
@@ -598,4 +620,12 @@ public class MineSweeper extends Activity {
     public Clock getClock() {
         return clock;
     }
+
+    public void loadFont(TextView t){
+        Typeface font;
+        TextView text=t;
+        font = Typeface.createFromAsset(getAssets(),"fonts/ARMY RUST.ttf");
+        text.setTypeface(font); }
+
+
 }

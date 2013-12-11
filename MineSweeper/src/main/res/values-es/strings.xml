@@ -11,4 +11,7 @@
     <string name="back">Atras</string>
     <string name="title_level_menu">Seleccione Nivel</string>
     <string name="ok">Ok</string>
+    <string name="you_lose">Perdiste</string>
+    <string name="you_win">Ganaste</string>
+
 </resources>

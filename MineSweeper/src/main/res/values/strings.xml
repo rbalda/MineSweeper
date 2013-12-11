@@ -10,4 +10,6 @@
     <string name="back">Back</string>
     <string name="title_level_menu">Select Level</string>
     <string name="ok">Ok</string>
+    <string name="you_lose">You Lose</string>
+    <string name="you_win">You Win</string>
 </resources>
