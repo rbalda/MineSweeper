@@ -1,31 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width= "300dp"
+    android:orientation="horizontal"
+    android:layout_width= "match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:layout_marginBottom="50dp"
-    android:background="#336699">
 
+    android:layout_gravity="bottom"
+    android:layout_marginBottom="30dp"
+    android:background="#77000000"
+    android:baselineAligned="false"
+    >
 
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="300dp"
-        android:id="@+id/scoreView" />
+    <LinearLayout android:layout_width="wrap_content"
+        android:layout_weight="1"
+        android:layout_height="fill_parent"
 
-    <Button
-        android:layout_margin="15dp"
-        android:background="@drawable/button_states"
-        android:layout_width="120dip"
-        android:layout_height="40dip"
-        android:id="@+id/accept"
-        android:layout_gravity="center_horizontal"
-        android:textSize="25sp"
-        android:singleLine="false"
-        android:text="@string/ok"
-        android:layout_centerHorizontal="true"
+        android:orientation="vertical">
+        <TextView android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/novice"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal"
+            android:textSize="50sp"
+            android:background="@drawable/button"
+            android:scaleX="0.8"
+            android:scaleY="0.8"
+            android:textColor="#000000"
+            android:textAlignment="center"
+            android:id="@+id/cat_easy"/>
+        <ListView
+            style="@style/ListView"
+            android:layout_width="wrap_content"
+            android:layout_height="300dp"
+            android:id="@+id/scoreViewEasy" />
+        </LinearLayout>
+    <LinearLayout android:layout_width="wrap_content"
+        android:layout_weight="1"
+        android:layout_height="fill_parent"
 
-        />
+        android:orientation="vertical">
+        <TextView android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/normal"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal"
+            android:textSize="50sp"
+            android:background="@drawable/button"
+            android:scaleX="0.8"
+            android:scaleY="0.8"
+            android:textColor="#000000"
+            android:textAlignment="center"
+            android:id="@+id/cat_normal"
+            />
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="300dp"
+            android:id="@+id/scoreViewNormal" />
+
+        <Button
+            android:layout_margin="15dp"
+            android:background="@drawable/button_states"
+            android:layout_width="120dip"
+            android:layout_height="40dip"
+            android:id="@+id/accept"
+            android:layout_gravity="center_horizontal"
+            android:textSize="25sp"
+            android:singleLine="false"
+            android:text="@string/ok"
+            android:layout_centerHorizontal="true"
+
+            />
+        </LinearLayout>
+        <LinearLayout android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:layout_height="fill_parent"
+
+            android:orientation="vertical">
+            <TextView android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/expert"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal"
+                android:textSize="50sp"
+                android:background="@drawable/button"
+                android:scaleX="0.8"
+                android:scaleY="0.8"
+                android:textColor="#000000"
+                android:textAlignment="center"
+                android:id="@+id/cat_expert"/>
+            <ListView
+                android:layout_width="wrap_content"
+                android:layout_height="300dp"
+                android:id="@+id/scoreViewExpert" />
+        </LinearLayout>
+
 
 </LinearLayout>
