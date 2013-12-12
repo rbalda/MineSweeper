@@ -42,47 +42,114 @@ import java.util.Random;
 import javax.sql.DataSource;
 
 /**
- * Created by ReneAlexander on 04/11/13.
+ * Contains MineSweeper's Graphical User Interface and Game Logic
+ *
+ * @author Jimmy Banchón
+ * @author Rene Balda
+ *
  */
 public class MineSweeper extends Activity {
+    /**
+     * Clock timer
+     */
     private Clock clock;
-    public TableLayout gamePanel; // table layout to add mines to
+    /**
+     * Table layout to add the blocks
+     */
+    public TableLayout gamePanel;
+    /**
+     * Instance of Smile button
+      */
     private Smile btnSmile;
-    private boolean isPressed = false;
+    /**
+     * Hash Map who contains the information of levels
+     */
     private HashMap<Level, LevelData> levels;
+    /**
+     * The game is Started
+     */
     private boolean isStarted = false;
+    /**
+     * The game is Over
+     */
     private boolean isOver = true;
+    /**
+     * The game is Mined already
+     */
     private boolean isMined= false;
+    /**
+     * Array that contains the shields
+     */
     private Shield shields[];
+    /**
+     * Array that contains the shieldsUI
+     */
     private ImageView shieldsUI[];
+    /**
+     * Counter of FLAGs
+     */
     public Counter counter;
-    private Intent intent;
+    /**
+     * Layout Params with the shields location
+     */
     private ViewGroup.LayoutParams locationOfShields;
-
-
-    private AnimationDrawable animationDrawable;
+    /**
+     *  Click Sound player
+     */
     private MediaPlayer clickSound;
+    /**
+     * Mine Pressed Sound player
+     */
     private MediaPlayer mineSound;
-    private MediaPlayer backgroundSound;
+    /**
+     * Position to init the sounds
+     */
     private int posActual=0;
-
-    private BlockUI blocks[][]; // blocks for mine field
-    private int blockDimension = 60; // width of each block
-    private int blockPadding = 2; // padding between blocks
-
+    /**
+     * Array of BlocksUI for game panel
+     */
+    private BlockUI blocks[][];
+    /**
+     * Block Dimension
+     */
+    private int blockDimension = 60;
+    /**
+     * Block Padding
+     */
+    private int blockPadding = 2;
+    /**
+     * Number of Rows in the Game Panel
+     */
     private int nOrInGamePanel;
+    /**
+     * Number of Columns in the Game Panel
+     */
     private int nOcInGamePanel;
+    /**
+     * Total Numbers of Mines to put in Game Panel
+     */
     private int totalNumberOfMines;
+    /**
+     * Current Level Selected
+     */
     private String currentLevel;
+    /**
+     * Dialog when the game is Lost
+     */
     public Dialog gameLostDialog;
+    /**
+     * Dialog when the game is Won
+     */
     public Dialog gameFinishDialog;
-
-    public static final String TAG = "TratamientoXML";
-
+    /**
+     * Use Data Source Instance
+     */
     private UserDataSource dataSource;
 
 
-    //Method that initialize variables for the Game
+    /**
+     * Method that initialize variables for the Game
+     */
     public void init() {
         levels = new HashMap<Level, LevelData>();
         levels.put(Level.BEGINNER, new LevelData(16, 16, 10));
@@ -94,8 +161,10 @@ public class MineSweeper extends Activity {
 
     }
 
-
-
+    /**
+     * Creates the android elements and instance it for Minesweeper
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,13 +178,10 @@ public class MineSweeper extends Activity {
 
         TextView t = (TextView) findViewById(R.id.Clock);
 
-
-        //shield = new Shield((ImageView) findViewById(R.id.flag));
         initShields();
         createWonDialog();
         createLoseDialog();
 
-        //animationDrawable = (AnimationDrawable) shield.getS().getBackground();
         clock = new Clock(t);
 
         gamePanel = (TableLayout) findViewById(R.id.game_panel);
@@ -136,14 +202,13 @@ public class MineSweeper extends Activity {
                 if(!isStarted())
                     startGame();
 
-                //setMinesOnGamePanel(10, 4, 5);
             }
         });
-
-
-
     }
 
+    /**
+     * creates the won dialog and set layouts, contents and listeners
+     */
     public void createWonDialog(){
         gameFinishDialog = new Dialog(MineSweeper.this,R.style.Menu);
         gameFinishDialog.setTitle(getResources().getString(R.string.title_level_menu));
@@ -152,50 +217,55 @@ public class MineSweeper extends Activity {
         gameFinishDialog.findViewById(R.id.restart).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //saveXml("Jimmy",currentLevel,counter.getCount());
+
                 String s = ((EditText)gameFinishDialog.findViewById(R.id.nameText)).getText().toString();
                 User u = dataSource.createUser(s,clock.getCount(),currentLevel);
                 restartGame();
                 gameFinishDialog.dismiss();
 
-                //readXml();
+
             }
         });
         gameFinishDialog.findViewById(R.id.exit).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //saveXml("Jimmy",currentLevel,counter.getCount());
+
                 String s = ((EditText)gameFinishDialog.findViewById(R.id.nameText)).getText().toString();
                 User u = dataSource.createUser(s,clock.getCount(),currentLevel);
                 gameFinishDialog.dismiss();
                 dataSource.close();
-                backgroundSound.stop();
-                finish();
 
-                //readXml();
+                finish();
             }
         });
-
+        //Adding params to increment the behind screen brightness
         WindowManager.LayoutParams lp = gameFinishDialog.getWindow().getAttributes();
         lp.dimAmount=0.5f;
         lp.screenBrightness = 1.0F;
         gameFinishDialog.getWindow().setAttributes(lp);
         gameFinishDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-        //setLevelButtonAction();
+
     }
 
+    /**
+     * Start the the block clicked sound
+     */
     public void playClick(){
         clickSound.seekTo(posActual);
         clickSound.start();
     }
 
+    /**
+     * Start the Mine exploding sound
+     */
     public void playMine(){
         mineSound.seekTo(posActual);
         mineSound.start();
     }
 
-
-
+    /**
+     * creates the lose dialog and set layouts, contents and listeners
+     */
     public void createLoseDialog(){
         gameLostDialog = new Dialog(MineSweeper.this,R.style.Menu);
         gameLostDialog.setContentView(R.layout.losedialog);
@@ -205,7 +275,7 @@ public class MineSweeper extends Activity {
             public void onClick(View v) {
                 restartGame();
                 gameLostDialog.dismiss();
-                //readXml();
+
             }
         });
         gameLostDialog.findViewById(R.id.exit).setOnClickListener(new View.OnClickListener() {
@@ -217,105 +287,20 @@ public class MineSweeper extends Activity {
                 finish();
             }
         });
-
+        //Adding params to increment the behind screen brightness
         WindowManager.LayoutParams lp = gameFinishDialog.getWindow().getAttributes();
         lp.dimAmount=0.5f;
         lp.screenBrightness = 1.0F;
         gameLostDialog.getWindow().setAttributes(lp);
         gameLostDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-        //setLevelButtonAction();
-    }
-
-
-    private void saveXml(String name, String level, int time){
-        FileOutputStream fileOut =null;
-
-        try{
-            fileOut = openFileOutput("scores.xml", MODE_PRIVATE);
-
-        }catch (FileNotFoundException e){
-            Toast.makeText(this, e.getMessage(),Toast.LENGTH_SHORT).show();
-
-        }
-
-        XmlSerializer serializer = Xml.newSerializer();
-
-        try {
-            serializer.setOutput(fileOut, "UTF-8");
-            serializer.startDocument(null, true);
-            serializer.setFeature("http://xmlpull.org/v1/doc/features.html#indent-output", true);
-            serializer.startTag(null, "jugadores");
-            serializer.startTag(null, "jugador");
-
-            serializer.startTag(null,"nombre");
-            serializer.text(name);
-            serializer.endTag(null, "nombre");
-
-            serializer.startTag(null, "nivel");
-            serializer.text(level);
-            serializer.endTag(null, "nivel");
-
-            serializer.startTag(null,"tiempo");
-            serializer.text("" + time);
-            serializer.endTag(null, "tiempo");
-
-            serializer.endTag(null,"jugador");
-            serializer.endTag(null,"jugadores");
-
-            serializer.endDocument();
-            serializer.flush();
-            fileOut.close();
-
-            Toast.makeText(getApplicationContext(), "Escrito correctamente", Toast.LENGTH_LONG).show();
-
-        } catch (Exception e) {
-
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
-
-        }
-
 
     }
 
-    private void readXml() {
-        FileInputStream fileIn = null;
 
-        try{
-            fileIn = openFileInput("score.xml");
-
-        } catch(Exception e){
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
-        }
-
-        XmlPullParser parser = Xml.newPullParser();
-        try {
-            parser.setInput(fileIn, "UTF-8");
-
-            int event = parser.next();
-            while(event != XmlPullParser.END_DOCUMENT) {
-                if(event == XmlPullParser.START_TAG) {
-                    Log.d(TAG, "<" + parser.getName() + ">");
-                    for(int i = 0; i < parser.getAttributeCount(); i++) {
-                        Log.d(TAG, "\t" + parser.getAttributeName(i) + " = " + parser.getAttributeValue(i));
-                    }
-                }
-
-                if(event == XmlPullParser.TEXT && parser.getText().trim().length() != 0)
-                    Log.d(TAG, "\t\t" + parser.getText());
-
-                if(event == XmlPullParser.END_TAG)
-                    Log.d(TAG, "</" + parser.getName() + ">");
-
-                event = parser.next();
-            }
-            fileIn.close();
-
-            Toast.makeText(this, "Leido correctamente", Toast.LENGTH_LONG).show();
-        } catch (Exception e) {
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
-        }
-    }
-
+    /**
+     * Set the values of the game constants and save the current level string
+     * @param value from the value sent with intent information from the last activity(MainMenu)
+     */
     private void extractLevel(int value){
         switch (value){
             case 1:
@@ -340,6 +325,9 @@ public class MineSweeper extends Activity {
         return;
     }
 
+    /**
+     * Initiates the Shield logic and UI information to put it in the game
+     */
     public void initShields(){
         RelativeLayout main = (RelativeLayout)findViewById(R.id.relative_layout);
 
@@ -362,6 +350,9 @@ public class MineSweeper extends Activity {
         }
     }
 
+    /**
+     * Restarts the number of Shields of the panel if the game is restarted
+     */
     public void restartShields(){
         counter.setCount(totalNumberOfMines);
         RelativeLayout main = (RelativeLayout)findViewById(R.id.relative_layout);
@@ -376,6 +367,10 @@ public class MineSweeper extends Activity {
         }
     }
 
+    /**
+     *
+     * @param hasFocus
+     */
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
@@ -388,6 +383,9 @@ public class MineSweeper extends Activity {
         //animationDrawable.start();
     }
 
+    /**
+     * Sets the variables of control of the game when starts
+     */
     public void startGame() {
         if(!isOver)
             return;
@@ -398,6 +396,9 @@ public class MineSweeper extends Activity {
         clock.start();
     }
 
+    /**
+     * Sets the variables of control of the game when is finish and discover the mines if there is no winner on the game
+     */
     public void endGame(){
         clock.stop();
         isStarted=false;
@@ -417,6 +418,9 @@ public class MineSweeper extends Activity {
         return;
     }
 
+    /**
+     * Restarts all the variables of control and shields to the original state
+     */
     public void restartGame(){
         btnSmile.getButton().setBackgroundResource(R.drawable.smile_states);
         clock.restart();
@@ -426,6 +430,9 @@ public class MineSweeper extends Activity {
         return;
     }
 
+    /**
+     * Creates the Physical game panel using the class BlockUI
+     */
     private void createGamePanel() {
         blocks = new BlockUI[nOrInGamePanel][nOcInGamePanel];
 
@@ -434,36 +441,14 @@ public class MineSweeper extends Activity {
                 blocks[row][column] = new BlockUI(this, row, column, this);
 
                 blocks[row][column].setSmile(btnSmile);
-                //blocks[row][column].setDefaults();
 
-
-
-              /*  blocks[row][column].setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if(!isPressed){
-                            if(blocks[cRow][cColumn].getValue()!= -1){
-                                blocks[cRow][cColumn].setTextColor(Color.CYAN);
-                                blocks[cRow][cColumn].setText(blocks[cRow][cColumn].toString());
-                                blocks[cRow][cColumn].setBackgroundResource(R.drawable.hole);
-                            }else
-                                blocks[cRow][cColumn].setBackgroundResource(R.drawable.button_selected);
-                            isPressed=true;
-                            blocks[cRow][cColumn].setClickable(false);
-                        }else if(isPressed){
-
-                            if(blocks[cRow][cColumn].getValue()!= -1)
-                                blocks[cRow][cColumn].setBackgroundResource(R.drawable.hole);
-                            else
-                                blocks[cRow][cColumn].setBackgroundResource(R.drawable.button_selected);
-                            isPressed=false;
-                        }
-                    }
-                });*/
             }
         }
     }
 
+    /**{
+     * Creates the GUI of the game panel to show the blocks and add all the adjacent blocks of every block
+     */
     private void showGamePanel() {
 
         int dimension = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, getResources().getDisplayMetrics());
@@ -481,8 +466,7 @@ public class MineSweeper extends Activity {
                         }
                     }
                 }
-                //
-                //blocks[row][column].setPadding(blockPadding, blockPadding, blockPadding, blockPadding);
+
 
                 tableRow.addView(blocks[row][column]);
             }
@@ -494,6 +478,11 @@ public class MineSweeper extends Activity {
         //
     }
 
+    /**
+     * Set the Mines on the game panel avoiding the column and row received from param and init the block value of each block
+     * @param cColumn
+     * @param cRow
+     */
     public void setMinesOnGamePanel(int cColumn, int cRow) {
         isMined= true;
         Random rand = new Random();
@@ -509,7 +498,7 @@ public class MineSweeper extends Activity {
                 }
             }
         }
-
+        //For every mine put is added to the adjacent list of all the blocks around
         for (int row = 0; row < nOrInGamePanel; row++) {
 
             for (int column = 0; column < nOcInGamePanel; column++) {
@@ -533,23 +522,27 @@ public class MineSweeper extends Activity {
     }
 
 
+    /**
+     * Explores all the blocks setting the exploreState to false and using the recursive function exploreRec.. to discover the blocks without mines or values around that block
+     * @param block pressed
+     */
+    public void explore(BlockUI block) {
 
-    public boolean explore(BlockUI block) {
 
-        if (block.getValue() == -1) {
-            return true;
-        } else {
-            for (int row = 0; row < nOrInGamePanel; row++) {
-                for (int col = 0; col < nOcInGamePanel; col++) {
-                    blocks[row][col].setExploreState(false);
-                }
-
+        for (int row = 0; row < nOrInGamePanel; row++) {
+            for (int col = 0; col < nOcInGamePanel; col++) {
+                blocks[row][col].setExploreState(false);
             }
-            exploreRec(block);
+
         }
-        return false;
+        exploreRec(block);
+
     }
 
+    /**
+     * Recursive function that explores the blocks and pressed it the recursive method is sending to the adjacent blocks avoiding blocks that are not in the panel
+     * @param block
+     */
     private void exploreRec(BlockUI block) {
         if (block.isExploreState()||block.isShielded())
             return;
@@ -589,24 +582,48 @@ public class MineSweeper extends Activity {
 
     }
 
+    /**
+     * The Game is Over?
+     * @return boolean
+     */
     public boolean isOver() {
         return isOver;
     }
 
+    /**
+     * Set the Over state
+     * @param isOver
+     */
     public void setOver(boolean isOver) {
         this.isOver = isOver;
     }
 
+    /**
+     * The game hasStarted?
+     * @return boolean
+     */
     public boolean isStarted() {
         return isStarted;
     }
 
+    /**
+     * Set the Started state
+     * @param isStarted
+     */
     public void setStarted(boolean isStarted) {
         this.isStarted = isStarted;
     }
 
+    /**
+     * The Game is mined?
+     * @return boolean
+     */
     public boolean isMined(){return isMined;}
 
+    /**
+     * Load the custom text font of our app
+     * @param t
+     */
     public void loadFonts(TextView t){
         Typeface lcdFont = Typeface.createFromAsset(getAssets(),"fonts/digital-7 (mono).ttf");
         t.setTypeface(lcdFont);
@@ -616,6 +633,10 @@ public class MineSweeper extends Activity {
 
     }
 
+    /**
+     * Function that verifies if there is a winner counting the mines marked blocks pressed and compare it with the constants using operations
+     * @return boolean
+     */
     public boolean hasWon(){
 
         if(counter.getCount()>0)
@@ -641,11 +662,18 @@ public class MineSweeper extends Activity {
             return false;
     }
 
-
+    /**
+     * Gets the clock timer
+     * @return
+     */
     public Clock getClock() {
         return clock;
     }
 
+    /**
+     * Load the custom text font of our app
+     * @param t
+     */
     public void loadFont(TextView t){
         Typeface font;
         TextView text=t;
