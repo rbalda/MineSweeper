@@ -5,15 +5,38 @@ import android.widget.TextView;
 
 
 /**
- * Created by ReneAlexander on 05/11/13.
+ * Clock Class
+ *
+ * @author Jimmy Banchón
+ * @author Rene Balda
+ *
  */
 public class Clock implements Runnable {
+    /**
+     * Count of time
+     */
     private int count;
+    /**
+     * Max Count got
+     */
     private final int MAX_COUNT = 999;
+    /**
+     * is initialized state
+     */
     private boolean isInitialized = false;
+    /**
+     * text view container
+     */
     private TextView text;
+    /**
+     * Handler of the time
+     */
     private Handler time;
 
+    /**
+     * Constructor
+     * @param t
+     */
     public Clock(TextView t) {
         time = new Handler();
         count = 0;
@@ -22,6 +45,9 @@ public class Clock implements Runnable {
 
     }
 
+    /**
+     * Run the clock
+     */
     @Override
     public void run() {
         long currentMilliseconds = System.currentTimeMillis();
@@ -43,6 +69,9 @@ public class Clock implements Runnable {
             stop();
     }
 
+    /**
+     * Start the count of clock
+     */
     public void start() {
         if (!isInitialized) {
             count = 0;
@@ -52,20 +81,34 @@ public class Clock implements Runnable {
         }
     }
 
+    /**
+     * Stop the count of clock
+     */
     public void stop() {
         time.removeCallbacks(this);
         isInitialized = false;
     }
 
+    /**
+     * getter of count
+     * @return
+     */
     public int getCount() {
         return count;
     }
 
+    /**
+     * restar the count of clock
+     */
     public void restart(){
         count=0;
         text.setText("00" + Integer.toString(count));
     }
 
+    /**
+     * Function to string
+     * @return
+     */
     public String toString() {
         return Integer.toString(count);
     }

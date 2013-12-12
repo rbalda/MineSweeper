@@ -10,15 +10,25 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 /**
- * Created by ReneAlexander on 17/11/13.
+ * Contains Shield GUI
+ *
+ * @author Jimmy Banchón
+ * @author Rene Balda
+ *
  */
 public class Shield {
+    /**
+     * Image View container
+     */
     ImageView s;
 
-    RelativeLayout.LayoutParams layoutParams;
     int oldX = 0;
     int oldY = 0;
 
+    /**
+     * Constructor of shield
+     * @param shield
+     */
     public Shield(ImageView shield) {
         this.s = shield;
         s.setScaleX((float) .9);
@@ -46,6 +56,10 @@ public class Shield {
 
     }
 
+    /**
+     * Getter of s
+     * @return
+     */
     public ImageView getS() {
         return s;
     }
