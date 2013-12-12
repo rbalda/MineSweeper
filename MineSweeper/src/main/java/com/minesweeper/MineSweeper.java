@@ -134,9 +134,9 @@ public class MineSweeper extends Activity {
      */
     public void init() {
         levels = new HashMap<Level, LevelData>();
-        levels.put(Level.BEGINNER, new LevelData(16, 16, 10));
-        levels.put(Level.INTERMEDIATE, new LevelData(16, 16, 10));
-        levels.put(Level.EXPERT, new LevelData(16, 30, 10));
+        levels.put(Level.BEGINNER, new LevelData(9, 9, 10));
+        levels.put(Level.INTERMEDIATE, new LevelData(16, 16, 40));
+        levels.put(Level.EXPERT, new LevelData(16, 30, 99));
 
         dataSource = new UserDataSource(this);
         dataSource.open();
@@ -216,6 +216,8 @@ public class MineSweeper extends Activity {
                 User u = dataSource.createUser(s,clock.getCount(),currentLevel);
                 gameFinishDialog.dismiss();
                 dataSource.close();
+                //backgroundSound.stop();
+                finish();
 
                 finish();
             }
