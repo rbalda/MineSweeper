@@ -8,11 +8,24 @@ import android.media.MediaPlayer;
 
 
 public class PermanentAudio {
-
+    /**
+     * Instance of media player
+     */
     private MediaPlayer mediaPlayer;
+    /**
+     * is Playing state
+     */
     private boolean isPlaying = false;
+    /**
+     * in Loop state
+     */
     private boolean inLoop =false;
 
+    /**
+     * Constructor
+     * @param ctx
+     * @param resID
+     */
     public PermanentAudio(Context ctx, int resID)
     {
         mediaPlayer= MediaPlayer.create(ctx, resID);
@@ -32,6 +45,9 @@ public class PermanentAudio {
 
     }
 
+    /**
+     * Play the sound
+     */
     public synchronized void play()
     {
         if(isPlaying)
@@ -42,6 +58,10 @@ public class PermanentAudio {
             mediaPlayer.start();
         }
     }
+
+    /**
+     * Stop the sound
+     */
     public synchronized void stop()
     {
         try{
@@ -56,11 +76,19 @@ public class PermanentAudio {
         }
 
     }
+
+    /**
+     * Repeat the sound
+     */
     public synchronized void loop(){
         inLoop =true;
         isPlaying =true;
         mediaPlayer.start();
     }
+
+    /**
+     * Release the sound
+     */
     public void release(){
         if(mediaPlayer != null){
             mediaPlayer.release();

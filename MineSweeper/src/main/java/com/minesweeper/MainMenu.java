@@ -33,26 +33,70 @@ import java.util.List;
 
 
 /**
- * Created by ReneAlexander on 07/12/13.
+ * Contains Main Menu's Graphical User Interface
+ *  ---Main Activity---
+ * @author Jimmy Banchón
+ * @author Rene Balda
+ *
  */
 public class MainMenu extends Activity {
-    private Bundle bundle;
+    /**
+     *
+     */
     private Typeface font;
+    /**
+     * First Dialog (start)
+     */
     private Dialog startDialog;
+    /**
+     * Select Levels Dialog
+     */
     private Dialog levelDialog;
+    /**
+     * Scores Dialog
+     */
     private Dialog scoreDialog;
+    /**
+     * About Dialog
+     */
     private Dialog aboutDialog;
+    /**
+     * User Data Source from db
+     */
     private UserDataSource source;
+    /**
+     * List View to Show the Easy Mode Scores
+     */
     private ListView scoreListEasy;
+    /**
+     * List View to Show the Normal Mode Scores
+     */
     private ListView scoreListNormal;
+    /**
+     * List View to Show the Expert Mode Scores
+     */
     private ListView scoreListExpert;
-    private BaseAdapter adapter;
+    /**
+     * Array to contains all the expert scores
+     */
     private ArrayList<User> experts;
+    /**
+     * Array to contains all the normal scores
+     */
     private ArrayList<User> normal;
+    /**
+     * Array to contains all the easy scores
+     */
     private ArrayList<User> easy;
+    /**
+     * Instance of permanentAudio class to play the background sound
+     */
     private PermanentAudio backgroundSound;
 
-
+    /**
+     * Creates the android elements and instance it for Main Menu
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +119,10 @@ public class MainMenu extends Activity {
 
     }
 
+    /**
+     *
+     * @param hasFocus
+     */
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
@@ -88,18 +136,29 @@ public class MainMenu extends Activity {
         loadLevels(source.getAllUsers());
 
     }
-    
+
+    /**
+     * Method that initialize the arrays of users for scores
+     */
     public void init(){
         experts = new ArrayList<User>();
         normal = new ArrayList<User>();
         easy = new ArrayList<User>();
     }
 
+    /**
+     * gets the permanent Audio
+     * @param id
+     * @return permanentAudio
+     */
     private PermanentAudio getPermanentAudio(int id) {
 
         return new PermanentAudio(getBaseContext(),id);
     }
 
+    /**
+     * creates the select levels dialog and set layouts, contents and listeners
+     */
     public void createLevelDialog(){
         levelDialog = new Dialog(MainMenu.this,R.style.Menu);
         levelDialog.setTitle(getResources().getString(R.string.title_level_menu));
@@ -111,6 +170,9 @@ public class MainMenu extends Activity {
         setLevelButtonAction();
     }
 
+    /**
+     * creates the Initial dialog(Menu) and set layouts, contents and listeners
+     */
     public void createInitialDialog(){
         startDialog = new Dialog(MainMenu.this,R.style.Menu);
         startDialog.setContentView(R.layout.menudialoglayout);
@@ -121,6 +183,9 @@ public class MainMenu extends Activity {
         setInitialButtonAction();
     }
 
+    /**
+     * creates the score dialog and set layouts, contents and listeners
+     */
     public void createScoreDialog(){
         scoreDialog = new Dialog(MainMenu.this,R.style.Menu);
         scoreDialog.setTitle(getResources().getString(R.string.title_level_menu));
@@ -145,6 +210,9 @@ public class MainMenu extends Activity {
 
     }
 
+    /**
+     * Sets the on click listeners for every button of the initial dialog
+     */
     public void setInitialButtonAction(){
         startDialog.findViewById(R.id.exit).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -175,6 +243,9 @@ public class MainMenu extends Activity {
         });
     }
 
+    /**
+     * Sets the on click listeners for every button of the select level dialog
+     */
     public void setLevelButtonAction(){
         levelDialog.findViewById(R.id.easy).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -217,11 +288,10 @@ public class MainMenu extends Activity {
 
     }
 
-
-
-
-
-
+    /**
+     * Load the custom text font of our app
+     * @param t
+     */
     public void loadFont(TextView t){
         TextView text=t;
         font = Typeface.createFromAsset(getAssets(),"fonts/ARMY RUST.ttf");
@@ -231,6 +301,10 @@ public class MainMenu extends Activity {
 
     }
 
+    /**
+     * Loads from db all the Users with score and send it to the different levels arrays and sort them too
+     * @param l
+     */
     public void loadLevels(List<User> l){
         normal.removeAll(normal);
         experts.removeAll(experts);
@@ -253,6 +327,11 @@ public class MainMenu extends Activity {
 
     }
 
+    /**
+     * Function that receive a list to put it into the list view using an ArrayAdapter
+     * @param v
+     * @param list
+     */
     public void setListToListView(ListView v,List<User> list){
 
         ArrayAdapter<User> adapter=new ArrayAdapter<User>(this,android.R.layout.simple_list_item_1,android.R.id.text1,list);
@@ -260,7 +339,9 @@ public class MainMenu extends Activity {
 
     }
 
-
+    /**
+     * creates the about dialog and set layouts, contents and listeners
+     */
     public void createAboutDialog(){
         aboutDialog = new Dialog(MainMenu.this,R.style.Menu);
         aboutDialog.setContentView(R.layout.about_layout);
@@ -277,7 +358,7 @@ public class MainMenu extends Activity {
                 startDialog.show();
             }
         });
-
+        //Adding params to increment the behind screen brightness
         WindowManager.LayoutParams lp = aboutDialog.getWindow().getAttributes();
         lp.dimAmount=0.5f;
         lp.screenBrightness = 1.0F;
@@ -286,6 +367,9 @@ public class MainMenu extends Activity {
 
     }
 
+    /**
+     * Finish the app including the background sound
+     */
     @Override
     public void finish() {
         backgroundSound.stop();
