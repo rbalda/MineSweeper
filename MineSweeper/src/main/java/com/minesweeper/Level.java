@@ -1,7 +1,10 @@
 package com.minesweeper;
 
 /**
- * Created by ReneAlexander on 13/11/13.
+ * Enum of Levels
+ *
+ * @author Rene Balda
+ *
  */
 public enum Level {
     BEGINNER, INTERMEDIATE, EXPERT;

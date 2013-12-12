@@ -1,7 +1,11 @@
 package com.minesweeper;
 
 /**
- * Created by ReneAlexander on 13/11/13.
+ * Contains Level Data information
+ *
+ * @author Jimmy Banchón
+ * @author Rene Balda
+ *
  */
 public class LevelData {
     /**

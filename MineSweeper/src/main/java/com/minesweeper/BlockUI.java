@@ -28,21 +28,57 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 /**
- * Created by ReneAlexander on 06/11/13.
+ * Contains Block's Graphical User Interface Information
+ *
+ * @author Jimmy Banchón
+ * @author Rene Balda
+ *
  */
 public class BlockUI extends FrameLayout {
+    /**
+     * is Covered state
+     */
     private boolean isCovered;
+    /**
+     * Logic of the block
+     */
     private Block block;
+    /**
+     * Smile instance
+     */
     private Smile smile;
+    /**
+     * MineSweeper instance
+     */
     private MineSweeper mineSweeper;
-    private int dimension;
+    /**
+     * explored State for the recursive function
+     */
     private boolean exploreState;
+    /**
+     * List of all adjacent blocks
+     */
     private ArrayList<BlockUI> adjacentUI;
+    /**
+     * Array with the color information for the numbers of blocks
+     */
     private final int colours[]= {Color.MAGENTA,Color.CYAN, Color.YELLOW,Color.WHITE,Color.GREEN,Color.RED,Color.LTGRAY,Color.MAGENTA};
+    /**
+     * is Shielded state
+     */
     private boolean isShielded = false;
+    /**
+     * Vibrator instance
+     */
     private Vibrator vb;
 
-
+    /**
+     * Constructor that sets the listener events of the blocks
+     * @param context
+     * @param r
+     * @param c
+     * @param m
+     */
     public BlockUI(Context context, int r, int c, MineSweeper m) {
         super(context);
         Drawable d = getResources().getDrawable(R.drawable.block_states);
@@ -52,12 +88,9 @@ public class BlockUI extends FrameLayout {
 
 
 
-        //setLayoutParams(new LayoutParams(dimension,dimension));
-        //setPadding(-10, -10, -10, -10);
+
         block = new Block(r, c);
         mineSweeper = m;
-
-
 
         setOnTouchListener(new OnTouchListener() {
             @Override
@@ -150,47 +183,93 @@ public class BlockUI extends FrameLayout {
 
     }
 
+    /**
+     * Default constructor of the parent class
+     * @param context
+     * @param attrs
+     */
     public BlockUI(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
+    /**
+     * Default constructor of the parent class
+     * @param context
+     * @param attrs
+     * @param defStyle
+     */
     public BlockUI(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 
+    /**
+     * Setter of Covered state
+     * @param isCovered
+     */
     public void setCovered(boolean isCovered) {
         this.isCovered = isCovered;
     }
 
+    /**
+     * Getter of covered state
+     * @return
+     */
     public boolean isCovered() {
         return isCovered;
     }
 
+    /**
+     *
+     */
     public void discover() {
         isCovered = false;
         setEnabled(isCovered);
     }
 
+    /**
+     * Getter of explored state
+     * @return
+     */
     public boolean isExploreState() {
         return exploreState;
     }
 
+    /**
+     * Setter of explored state
+     * @param exploreState
+     */
     public void setExploreState(boolean exploreState) {
         this.exploreState = exploreState;
     }
 
+    /**
+     * Setter of block value
+     * @param v
+     */
     public void setValue(int v) {
         this.block.setValue(v);
     }
 
+    /**
+     * getter of block value
+     * @return
+     */
     public int getValue() {
         return block.getValue();
     }
 
+    /**
+     * getter of block logic
+     * @return
+     */
     public Block getBlock() {
         return block;
     }
 
+    /**
+     * Add adjacents with mines from block logic
+     * @param block
+     */
     public void addAdjacent(BlockUI block) {
         if(!(this.getValue()==-1))
             this.block.addAdjacent(block.getBlock());
@@ -198,15 +277,26 @@ public class BlockUI extends FrameLayout {
             return;
     }
 
+    /**
+     * To String function
+     * @return
+     */
     public String toString() {
         return Integer.toString(block.getValue());
     }
 
-
+    /**
+     * Setter of smile
+     * @param s
+     */
     public void setSmile(Smile s) {
         smile = s;
     }
 
+    /**
+     * On Draw function used in Drag and Drop
+     * @param canvas
+     */
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -242,30 +332,18 @@ public class BlockUI extends FrameLayout {
 
     }
 
+    /**
+     * Function that adds BlockUI to the list
+     * @param b
+     */
     public void addAdjacentUI(BlockUI b) {
         adjacentUI.add(b);
     }
 
-
-    public void uncover() {
-        if(this.getValue()==-1)
-            return;
-        if (this.getValue() > 0) {
-            this.setPressed(true);
-            return;
-        }
-        if(this.getValue()==0){
-            this.setPressed(true);
-            for(BlockUI b:adjacentUI){
-                b.uncover();
-                return;
-            }
-
-        }
-
-
-    }
-
+    /**
+     * Getter of is shielded state
+     * @return
+     */
     public boolean isShielded(){
         return isShielded;
     }
